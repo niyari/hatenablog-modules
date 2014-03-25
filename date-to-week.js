@@ -30,8 +30,7 @@ http://psn.hatenablog.jp/
 		var w = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 		var el = document.createElement("span");
 		var str = document.createTextNode(w[d.getDay()]);
-		el.setAttribute("class", "date-week");
-		el.setAttribute("class", "date-week-" + str.data);
+		el.setAttribute("class", "date-week date-week-" + str.data);
 		el.appendChild(str);
 		return el;
 	}
