@@ -25,8 +25,9 @@ http://psn.hatenablog.jp/
 	}
 	function DateToWeek(day){
 		if(typeof day === "undefined"){return ""}
-		day = day.substr(0,10);
+		//day = day.substr(0,10);
 		var d = new Date(day);
+		if(typeof d === "undefined" || isNaN( d ) ){return ""}
 		var w = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 		var el = document.createElement("span");
 		var str = document.createTextNode(w[d.getDay()]);
