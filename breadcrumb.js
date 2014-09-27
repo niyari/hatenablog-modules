@@ -29,6 +29,8 @@ http://psn.hatenablog.jp/
 
 	var categoryBody = document.querySelectorAll("header.entry-header div.categories");
 	//単一ページの場合もあるけど、TOPページから見たら複数ある事もあるよね
+	if (categoryBody.length > 1) return;
+	//TODO: 20140927-0a
 
 	for (var i = 0; i < categoryBody.length; i++){
 		pankuzuSet(categoryBody[i]);
