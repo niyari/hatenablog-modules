@@ -1,19 +1,19 @@
 /*
 
-* �͂Ăȃu���O�̋L���̓��t�ɗj����\������
+* はてなブログの記事の日付に曜日を表示する
 
-** �g����
+** 使い方
 
-�ȉ����R�s�[���āA�f�U�C���ҏW �� �J�X�^�}�C�Y �� �t�b�^HTML �ɓ\��t��
+以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
 
 <script src="http://niyari.github.io/hatenablog-modules/date-to-week.js" charset="utf-8"></script>
 
-�͂Ăȃu���O�̓��t���Z�܂��Ă��鏊�ɁuSun�v�uMon�v�c �Ƃ������j����}�����܂�
-date-week��date-week-�j��(ex:date-week-Sun)�Ƃ����N���X����������̂�
-���j�����F��ς�����摜�ɂ��Ă݂���F�X�ł���悤�ɂȂ�Ǝv���܂�
-�ǂ��������p��������
+はてなブログの日付が纏まっている所に「Sun」「Mon」… といった曜日を挿入します
+date-weekとdate-week-曜日(ex:date-week-Sun)というクラスを持たせるので
+日曜だけ色を変えたり画像にしてみたり色々できるようになると思います
+どうぞご利用ください
 
-�ڍׂ́A���Ȃ΂����� �֏����\��ł��B
+詳細は、すなばいじり へ書く予定です。
 http://psn.hatenablog.jp/
 
 */
