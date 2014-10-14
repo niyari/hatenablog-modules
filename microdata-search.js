@@ -6,7 +6,7 @@
 
 以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
 
-<script src="//niyari.github.io/hatenablog-modules/microdata-search.js" charset="utf-8"></script>
+<script src="//niyari.github.io/hatenablog-modules/microdata-search.js" charset="utf-8" async defer></script>
 
 検索ボックスにmicrodataを差し込むやつです。
 Amazonや価格.comのGoogleの検索結果のように、「検索結果内の検索ボックス」が表示できるようなデータを生成します。

@@ -6,7 +6,7 @@
 
 以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
 
-<script src="http://niyari.github.io/hatenablog-modules/date-to-week.js" charset="utf-8"></script>
+<script src="http://niyari.github.io/hatenablog-modules/date-to-week.js" charset="utf-8" async defer></script>
 
 はてなブログの日付が纏まっている所に「Sun」「Mon」… といった曜日を挿入します
 date-weekとdate-week-曜日(ex:date-week-Sun)というクラスを持たせるので
