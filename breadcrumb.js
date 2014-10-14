@@ -15,7 +15,7 @@ var _parentCategory = [
 						"親カテゴリ3",
 					  ];
 </script>
-<script src="//niyari.github.io/hatenablog-modules/breadcrumb.js" charset="utf-8"></script>
+<script src="//niyari.github.io/hatenablog-modules/breadcrumb.js" charset="utf-8" async defer></script>
 <!-- ここまで -->
 
 記事のヘッダ部分にあるカテゴリに、パンくずリストのようなmicrodataを差し込むやつです。
