@@ -19,7 +19,7 @@ http://psn.hatenablog.jp/
 */
 
 (function(){
-	datetimeEle = document.querySelectorAll('[datetime]');
+	datetimeEle = document.querySelectorAll('header.entry-header [datetime]');
 	for (var i = 0; i < datetimeEle.length; i++){
 		datetimeEle[i].appendChild(DateToWeek(datetimeEle[i].getAttribute("datetime")));
 	}
