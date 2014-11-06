@@ -38,6 +38,9 @@ http://psn.hatenablog.jp/
 		add_SearchAction_Tag(_searchBoxBody);
 	}else{
 		//タグが無いので何かする
+		if(!window.console) {
+			window.console = { log: function(msg){} };
+		}
 		console.log("microdata付き検索ボックス: 検索ボックスが設置されていないようです。");
 		make_SearchBox();
 	}
@@ -49,7 +52,7 @@ http://psn.hatenablog.jp/
 		var meta_url = document.createElement("meta");
 		var meta_target = meta_url.cloneNode(true);
 		meta_url.setAttribute("itemprop", "url");//set itemprop - url
-		meta_url.setAttribute("content", _baseURI);//set itemprop - url - content
+		meta_url.setAttribute("content", _baseURI + '/');//set itemprop - url - content
 		meta_target.setAttribute("itemprop", "target");//set itemprop - target
 		meta_target.setAttribute("content", _baseURI + '/search?q={q}');//set itemprop - target - content
 
