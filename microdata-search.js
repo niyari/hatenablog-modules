@@ -6,7 +6,7 @@
 
 以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
 
-<script src="//niyari.github.io/hatenablog-modules/microdata-search.js" charset="utf-8" async defer></script>
+<script src="//niyari.github.io/hatenablog-modules/microdata-search.js" charset="utf-8" defer></script>
 
 検索ボックスにmicrodataを差し込むやつです。
 Amazonや価格.comのGoogleの検索結果のように、「検索結果内の検索ボックス」が表示できるようなデータを生成します。
@@ -23,9 +23,8 @@ How do you set it up?を参照してマークアップすると良いでしょ�
 
 免責：何が起きても各自の責任の下お使いください。その代わりにコメントたくさん書きました。
 
-
-詳細は、すなばいじり へ書く予定です。
-http://psn.hatenablog.jp/
+詳しい設置方法など、すなばいじり をご覧ください。
+http://psn.hatenablog.jp/entry/discover-hatena
 
 */
 
@@ -78,20 +77,20 @@ http://psn.hatenablog.jp/
 	function make_SearchBox(){
 		//検索ボックスが設置されていないらしい
 		var html_str = '<!-- microdata付き検索ボックス -->';
-		html_str = html_str + '<div class="hatena-module hatena-module-search-box">';
-		html_str = html_str + '<div class="hatena-module-title">何かお探しですか？ :)</div>';
-		html_str = html_str + '<div itemscope itemtype="http://schema.org/WebSite" class="hatena-module-body">';
-		html_str = html_str + '	<meta itemprop="url" content="' + _baseURI + '/"/>';
-		html_str = html_str + '	<form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" class="search-form" role="search" action="' + _baseURI + '/search" method="get">';
-		html_str = html_str + '		<meta itemprop="target" content="' + _baseURI + '/search?q={q}"/>';
-		html_str = html_str + '		<input itemprop="query-input" type="text" name="q" class="search-module-input" placeholder="ブログ内検索" required="">';
-		html_str = html_str + '		<input type="submit" class="search-module-button">';
-		html_str = html_str + '	</form>';
-		html_str = html_str + '</div>';
-		html_str = html_str + '<p>検索ボックスが自動生成されました</p>';
-		html_str = html_str + '</div>';
-		html_str = html_str + "\n<!-- http://psn.hatenablog.jp -->";
-		html_str = html_str + "\n<!-- / microdata付き検索フォーム -->";
-		document.write(html_str);
+		html_str += '<div class="hatena-module hatena-module-search-box">';
+		html_str += '<div class="hatena-module-title">何かお探しですか？ :)</div>';
+		html_str += '<div itemscope itemtype="http://schema.org/WebSite" class="hatena-module-body">';
+		html_str += '	<meta itemprop="url" content="' + _baseURI + '/"/>';
+		html_str += '	<form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" class="search-form" role="search" action="' + _baseURI + '/search" method="get">';
+		html_str += '		<meta itemprop="target" content="' + _baseURI + '/search?q={q}"/>';
+		html_str += '		<input itemprop="query-input" type="text" name="q" class="search-module-input" placeholder="ブログ内検索" required="">';
+		html_str += '		<input type="submit" class="search-module-button">';
+		html_str += '	</form>';
+		html_str += '</div>';
+		html_str += '<p>検索ボックスが自動生成されました</p>';
+		html_str += '</div>';
+		html_str += "\n<!-- http://psn.hatenablog.jp/entry/discover-hatena -->";
+		html_str += "\n<!-- / microdata付き検索フォーム -->";
+		document.querySelector("div#box2-inner").insertAdjacentHTML('beforeend',html_str);
 	}
 })();
