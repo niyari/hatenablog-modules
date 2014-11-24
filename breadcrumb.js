@@ -28,8 +28,8 @@ https://support.google.com/webmasters/answer/185417
 そもそもブログ側の構造的がアレで、色々無理矢理だったりするので、githubに上げておきます。
 使いやすいように各自、適当に弄ってください。
 
-詳細は、すなばいじり へ書く予定です。
-http://psn.hatenablog.jp/
+詳しい設置方法や詳細は、すなばいじり をご覧ください。
+http://psn.hatenablog.jp/entry/discover-hatena
 
 */
 
@@ -110,7 +110,7 @@ http://psn.hatenablog.jp/
 		var nav_Breadcrumb = document.createElement("nav");
 		var categoryList = Categories.querySelectorAll("a");
 
-		if(categoryList.length > 1) return;
+		if(categoryList.length < 1) return;
 
 		var treeList = make_BreadcrumbTree(categoryList);
 		var nav_Child = [];
