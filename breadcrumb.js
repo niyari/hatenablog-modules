@@ -109,6 +109,9 @@ http://psn.hatenablog.jp/
 	function make_BreadcrumbNav(Categories){
 		var nav_Breadcrumb = document.createElement("nav");
 		var categoryList = Categories.querySelectorAll("a");
+
+		if(categoryList.length > 1) return;
+
 		var treeList = make_BreadcrumbTree(categoryList);
 		var nav_Child = [];
 		var nav_Parent = [];
