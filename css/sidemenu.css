@@ -1,0 +1,183 @@
+@CHARSET "UTF-8";
+#psne-sidemenu-end {
+	margin-bottom: 44px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+
+#psne-side-menu-overlay-container {
+    position: fixed;
+    width: 0;
+    height: 0;
+    z-index: 200
+}
+
+.menu-open #psne-side-menu-overlay-container {
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+}
+
+#psne-side-menu-overlay {
+    display: none;
+    background-color: #000;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+}
+
+.menu-open #psne-side-menu-overlay {
+	display: block;
+	position: absolute;
+	opacity: .5;
+}
+
+/**/
+#psne-side-menu-button {
+	position: fixed;
+	z-index: 301;
+	margin: 0 0 10px;
+	bottom: 0;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	vertical-align: top;
+	padding: 0;
+	width: 39px;
+	height: 39px;
+	border-radius: 0 4px 4px 0;
+	-webkit-border-radius: 0 4px 4px 0;
+	box-shadow: 0 2px 3px 0 rgba(0,0,0,.18);
+	line-height: 40px;
+	font-size: 21px;
+	color: #333;
+	border: 1px solid #ddd;
+	background-color: #fff;
+	-webkit-transition: opacity .3s ease;
+	-moz-transition: opacity .3s ease;
+	-ms-transition: opacity .3s ease;
+	-o-transition: opacity .3s ease;
+	transition: opacity .3s ease
+}
+.menu-open #psne-side-menu-button {
+	left: 205px;
+}
+
+/**/
+html.menu-open,html.menu-open body {
+    overflow: hidden;
+    position: relative;
+    height: 100%
+
+}
+
+html.menu-open #container {
+    display: block;
+    width: 100%!important;
+    position: absolute;
+/* bs */
+}
+
+#psne-side-menu {
+	display: none;
+	min-width: 200px;
+	max-width: 75%;
+	min-height: 100%;
+	height: 100%;
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	background-color: #fff;
+	color: #333;
+}
+
+#psne-side-menu ol,ul {
+    margin: 0;
+    padding: 0;
+    list-style: none
+}
+
+html.menu-open #psne-side-menu {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 300;
+
+    box-shadow: 1px 0 3px rgba(0,0,0,.18);
+    -moz-box-shadow: 1px 0 3px rgba(0,0,0,.18);
+    -webkit-box-shadow: 1px 0 3px rgba(0,0,0,.18);
+    -o-box-shadow: 1px 0 3px rgba(0,0,0,.18);
+    -ms-box-shadow: 1px 0 3px rgba(0,0,0,.18);
+
+}
+
+/**/
+#psne-side-menu li {
+    max-width: 210px;
+	width:　210px;/* 何か良い方法を考える */
+}
+
+#psne-side-menu a {
+	color: #333;
+	display: block;
+	font-size: 18px;
+	font-weight: 400;
+}
+/***/
+#psne-side-menu-top {
+	height: 44px;
+	text-align: center;
+	line-height: 40px;
+	font-size: 18px;
+	background-image: url(http://hatenablog.com/images/theme/og-image-1500.gif);
+	background-size: cover;
+	background-position: center;
+}
+#psne-side-menu .side-menu-container {
+	padding: .2em 0 .2em 0;
+}
+#psne-side-menu .side-menu-container-title {
+	font-size: 18px;
+	border-bottom: 1px solid #424242;
+}
+#psne-side-menu .hatena-urllist {
+	/* [disabled]border-top: 1px solid #424242; */
+}
+#psne-side-menu .urllist-item {
+	margin: .4em 0 .4em 0;
+	padding-bottom: 0.4em;
+	border-bottom: 1px solid #ccc;
+}
+#js-psne-newentry,#js-psne-hotentry {
+}
+#psne-side-menu .urllist-title-link {
+	margin: 0 0 0 .2em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 200px;
+	text-decoration: none;
+}
+#psne-side-menu .urllist-entry-body {
+  color: #bbb;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 200px;
+  margin: 0 0 0 1em;
+}
+#psne-sidemenu-end {
+	text-align: center;
+	margin-bottom: 44px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
