@@ -1,6 +1,16 @@
 /**
  * はてなブログにサイドメニューを追加する
  */
+// ==ClosureCompiler==
+// @output_file_name sidemenu.min.js
+// @compilation_level SIMPLE_OPTIMIZATIONS
+// @output_wrapper (function() {%output%})();
+// ==/ClosureCompiler==
+/**
+ * @preserve HatenaBlog SideMenu (c) 2015 Pocket Systems. | psn.hatenablog.jp
+ * (「・ω・)／ Alright, let's conquer the world! Da! https://www.youtube.com/watch?v=jcIOg_m-bp4
+ */
+//(function(){
 var overlayHtml,overlayContainer,sideMenuOverlay,sideMenu,scrollPosY;
 var info={};
 /*
@@ -111,6 +121,7 @@ function createSideMenu(que){
 				menulist.appendChild(createMenuItem(que[i][s]));
 			}
 			break;
+			//TODO キューの仕様を変える可能性あり['create','subscribe',…] → ['create',{'item':'subscribe',…}] どちらが良いですかねぇ
 			//TODO 新着エントリー・人気エントリー・メニューリストの並べ替え
 			//TODO 上記の非表示設定
 			//TODO 一覧表示の遅延表示設定
@@ -280,3 +291,4 @@ window.addEventListener("DOMContentLoaded", function(){
 	setupSideMenu();
 
 }, false);
+//})();
