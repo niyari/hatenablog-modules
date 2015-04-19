@@ -50,10 +50,13 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		//タグいれるやーつ
 		var meta_url = document.createElement("meta");
 		var meta_target = meta_url.cloneNode(true);
+		var meta_sitename = meta_url.cloneNode(true);
 		meta_url.setAttribute("itemprop", "url");//set itemprop - url
 		meta_url.setAttribute("content", _baseURI + '/');//set itemprop - url - content
 		meta_target.setAttribute("itemprop", "target");//set itemprop - target
 		meta_target.setAttribute("content", _baseURI + '/search?q={q}');//set itemprop - target - content
+		meta_sitename.setAttribute("itemprop", "name");//set itemprop - name
+		meta_sitename.setAttribute("content", document.getElementById("title").textContent);//set itemprop - name - content
 
 		//書き方が汚いがダラダラ実装
 		// http://schema.org/WebSite を定義する
@@ -73,6 +76,7 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		//書き換えが一通り終わったので、最後にmetaタグを入れる
 		searchBoxForm.insertBefore(meta_target, searchBoxForm.firstChild);
 		elem.insertBefore(meta_url, elem.firstChild);
+		elem.insertBefore(meta_sitename, elem.firstChild);
 	}
 	function make_SearchBox(){
 		//検索ボックスが設置されていないらしい
