@@ -12,7 +12,7 @@
  */
 //(function(){
 var overlayHtml,overlayContainer,sideMenuOverlay,sideMenu,scrollPosY;
-var info={};
+var info={},setting={};
 /*
  * メニュー開閉処理
  */
@@ -95,7 +95,9 @@ function setBlogInfo(){
 	info.urlEncodedentryTitle = encodeURIComponent(info.title);
 	info.urlEncodedPermaLink = encodeURIComponent(info.permaLink);
 	info.subscribeUrl = 'http://blog.hatena.ne.jp/' + info.blogAuthor +'/' + location.host + '/subscribe';
-	Hatena.Diary.Pages.message('init', function (obj) {
+
+    Messenger.addEventListener('init', function (obj) {
+//	Hatena.Diary.Pages.message('init', function (obj) {
 		if(obj === undefined) return;
 		info.can_open_editor = obj.can_open_editor;//編集可能か？
 		info.editable = obj.editable;//編集可能か？
@@ -103,6 +105,8 @@ function setBlogInfo(){
 		info.subscribeUrl = obj.subscribe_url;//購読用URL
 		info.subscribes = obj.subscribes;//購読者数
 	});
+    Messenger.send('init', info);
+
 }
 /*
  * サイドメニューのスケルトンを生成した後に呼び出す
@@ -120,6 +124,11 @@ function createSideMenu(que){
 			for (var s = 1; s < que[i].length; s++) {
 				menulist.appendChild(createMenuItem(que[i][s]));
 			}
+			break;
+		case 'init':
+			setting = que[i][1];
+			break;
+		case 'show':
 			break;
 			//TODO キューの仕様を変える可能性あり['create','subscribe',…] → ['create',{'item':'subscribe',…}] どちらが良いですかねぇ
 			//TODO 新着エントリー・人気エントリー・メニューリストの並べ替え
@@ -148,9 +157,8 @@ function createSideMenuElm(){
 	'<li><div id="js-blog-title">' + info.blogName + '</div></li>' +
 	'<li><div id="js-psne-newentry" class="side-menu-container"><div class="side-menu-container-title">新着エントリー</div></div></li>' +
 	'<li><div id="js-psne-hotentry" class="side-menu-container"><div class="side-menu-container-title">人気エントリー</div></div></li>' +
-	'<li><div class="side-menu-container"><div class="side-menu-container-title">こちらもどうぞ</div><ul id="js-psne-menulist">' +
-	'</ul></div></li>' +
-	'<li ><div id="psne-sidemenu-end"><a href="http://psn.hatenablog.jp/entry/discover-hatena" target="_blank">:)</a></div></li>';
+	'<li><div class="side-menu-container"><div class="side-menu-container-title">こちらもどうぞ</div><ul id="js-psne-menulist"></ul></div></li>' +
+	'<li><div id="psne-sidemenu-end"><a href="http://psn.hatenablog.jp/entry/discover-hatena" target="_blank">:)</a></div></li>';
 	document.body.appendChild(elmSideMenu);
 }
 /*
