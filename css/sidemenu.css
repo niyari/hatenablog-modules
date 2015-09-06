@@ -42,7 +42,7 @@
 	position: fixed;
 	z-index: 301;
 	margin: 0 0 10px;
-	bottom: 0;
+	bottom: 60px;
 	cursor: pointer;
 	display: inline-block;
 	text-align: center;
