@@ -17,8 +17,8 @@
 			insertTag(pattern);
 		} else if (window != parent) {
 			insertTag(pattern);
-			alert("正規サイトへ移動します。");
-			document.location = canonical.indexOf(pattern) === 0 ? canonical : pattern + "/search?q=" + encodeURIComponent(document.title);
+			//alert("正規サイトへ移動します。");
+			//document.location = canonical.indexOf(pattern) === 0 ? canonical : pattern + "/search?q=" + encodeURIComponent(document.title);
 		} else {
 			//console.log("hatenablog");
 		}
