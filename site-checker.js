@@ -15,7 +15,7 @@
 		var pattern = document.getElementsByTagName("html")[0].dataset.blogsUriBase;
 		if (pattern.indexOf(location.hostname) < 0) {
 			insertTag(pattern);
-		} else if (window != parent && document.referrer.indexOf("http://blog.hatena.ne.jp") < 0) {
+		} else if (window != parent && document.referrer.indexOf("http://blog.hatena.ne.jp") === 0) {
 			insertTag(pattern);
 		} else {
 			//console.log("hatenablog");
