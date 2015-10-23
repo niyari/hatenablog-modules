@@ -15,10 +15,8 @@
 		var pattern = document.getElementsByTagName("html")[0].dataset.blogsUriBase;
 		if (pattern.indexOf(location.hostname) < 0) {
 			insertTag(pattern);
-		} else if (window != parent) {
+		} else if (window != parent && document.referrer.indexOf("http://blog.hatena.ne.jp") < 0) {
 			insertTag(pattern);
-			//alert("正規サイトへ移動します。");
-			//document.location = canonical.indexOf(pattern) === 0 ? canonical : pattern + "/search?q=" + encodeURIComponent(document.title);
 		} else {
 			//console.log("hatenablog");
 		}
