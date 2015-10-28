@@ -20,5 +20,5 @@ Htnpsne.SideMenu('create', 'subscribe','facebook','googleplus','twitter','hatebu
 
 */
 
-(function(H,T,N,p,s,n,e){H.Htnpsne=H.Htnpsne||{};Htnpsne[s]=Htnpsne[s]||function(){(Htnpsne[s].q=Htnpsne[s].q||[]).push(arguments)};n=T.createElement(N);e=T.getElementsByTagName(N)[0];n.async=1;n.src=p;e.parentNode.insertBefore(n,e)})(window,document,"script","//niyari.github.io/hatenablog-modules/sidemenu.min.js","SideMenu");
+(function(H,T,N,p,s,n,e){H.Htnpsne=H.Htnpsne||{};Htnpsne[s]=Htnpsne[s]||function(){(Htnpsne[s].q=Htnpsne[s].q||[]).push(arguments)};n=T.createElement(N);e=T.getElementsByTagName(N)[0];n.async=1;n.src=p;e.parentNode.insertBefore(n,e)})(window,document,'script','//niyari.github.io/hatenablog-modules/sidemenu.min.js','SideMenu');
 Htnpsne.SideMenu('create','subscribe','facebook','googleplus','twitter','hatebu','pocket','feedly');
