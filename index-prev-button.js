@@ -25,7 +25,7 @@
 			$("<a>前のページ</a>", {
 				href: "#_"
 			})
-			).prependTo(".pager-next");
+			).prependTo(".pager");
 		}
 	}
 	//DOM生成完了時にスタート
