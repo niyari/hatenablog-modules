@@ -11,8 +11,9 @@
  * 「( ・ω・)┌*━━━ Laser Beam!!!! https://www.youtube.com/watch?v=K54CYowOqxM
  */
 (function () {
-	var prProtLink = '<div style="font-size: .7em;text-align: right;"><a href="' + arrToHostName(["http:", "//", "psn", ".hatenablog", ".jp", "/entry/proxy-hacking-protection"], '')
-		+ '/" target="_blank">by Proxy Hacking Protection</a></div>';
+	var prProtLink = '<div style="font-size: .7em;text-align: right;"><a href="'
+		+ arrToHostName(["http:", "//", "psn", ".hatenablog", ".jp", "/entry/proxy-hacking-protection"], '')
+		+ '" target="_blank">by Proxy Hacking Protection</a></div>';
 	var uriList = [], param = { phProtTrack: true };
 	function siteCheck() {
 		var uriData = '';
