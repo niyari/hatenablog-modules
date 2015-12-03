@@ -98,7 +98,7 @@
 		setupEventListener();
 		if (loadCSS) {
 			//デフォルトCSS読み込み
-			setupCSS("//sandbox.psne.jp/htn/also-read.css");
+			setupCSS("//niyari.github.io/hatenablog-modules/also-read.css");
 		}
 	}
 	//CSSをリンクする
