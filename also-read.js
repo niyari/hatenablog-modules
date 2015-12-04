@@ -97,7 +97,7 @@
 			} else if (mode == "Recent") {
 				getRSS(target[i].dataset.targetId, blogsUriBase + '/rss');
 			} else {
-				insertEntryList(target[i].dataset.targetId, "Category", categoryList[0]);
+				getRSS(target[i].dataset.targetId, blogsUriBase + rssPath + categoryList[0]);
 			}
 			$('#Htn-psne-Awasete-Link-' + target[i].dataset.targetId).tipsy({ opacity: 1 }); //はてなブログ依存のツールチップ
 
