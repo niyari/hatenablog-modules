@@ -1,14 +1,90 @@
-﻿.js-htnpsne-awasete-control {
-  float: right;
-  clear: both;
+﻿.js-htnpsne-awasete-module {
+	padding: 0.2em 0;
 }
-.js-htnpsne-awasete-control > a {
-  font-size: 0.7em;
-  text-decoration: none;
 
+.js-htnpsne-awasete-control {
+	float: right;
 }
+
+	.js-htnpsne-awasete-control:after {
+		content: '';
+		clear: both;
+		height: 0;
+		display: block;
+		visibility: hidden;
+	}
+
+	.js-htnpsne-awasete-control > a {
+		font-size: 0.7em;
+		text-decoration: none;
+	}
+
 span.js-htnpsne-awasete-title {
-  font-size: 1.2em;
-  padding-left: 0.3em;
-  border-left: solid 2px #888;
+	font-size: 1.2em;
+	padding-left: 0.3em;
+	border-left: solid 3px #888;
+}
+
+.js-htnpsne-awasete-control select {
+	margin: 0 1px;
+	border-width: 0 0 1px 0;
+}
+
+.js-htnpsne-awasete-control button {
+	background: #FFFFFF;
+	border: solid 1px #D8D8D8;
+	border-radius: 3px;
+	margin: 0 1px;
+	padding: 2px .6em;
+}
+
+.js-htnpsne-awasete-control i {
+	font-size: 85%;
+}
+
+	.js-htnpsne-awasete-control i:after {
+		padding-left: 0.3em;
+	}
+
+.js-htnpsne-awasete-btn-reload:hover i:after {
+	content: '再読み込み';
+}
+
+.js-htnpsne-awasete-btn-readmore:hover i:after {
+	content: 'もっと見る';
+}
+
+.js-htnpsne-awasete-btn-subscribe:hover i:after {
+	content: '購読する';
+}
+/* サイドバー */
+.hatena-module-body .js-htnpsne-awasete-control > a:after {
+	content: "\A";
+	white-space: pre;
+}
+
+.hatena-module-body .js-htnpsne-awasete-control {
+	float: none;
+	clear: both;
+	display: block;
+}
+
+	.hatena-module-body .js-htnpsne-awasete-control select {
+		width: 133px;
+	}
+
+	.hatena-module-body .js-htnpsne-awasete-control button {
+		width: 133px;
+	}
+
+.hatena-module-body .js-htnpsne-awasete-btn-reload i:after {
+	content: '再読み込み';
+}
+
+.hatena-module-body .js-htnpsne-awasete-btn-readmore i:after {
+	content: 'もっと見る';
+}
+
+.hatena-module-body .js-htnpsne-awasete-btn-subscribe i:after {
+	content: '購読する';
 }
