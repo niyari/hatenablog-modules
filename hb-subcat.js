@@ -26,11 +26,39 @@
 			}
 		}
 		if (typeof (setting.pattern) === 'undefined') {
-			return; //設定が無いのでカテゴリが作ることができない
+			return; //パターン設定が無いのでカテゴリが作ることができない
 		}
+		/* 各種設定 */
+		// TODO: 見通しが悪いので、いつかどうにかする
+		console.log("//openSub");
+		switch (setting.openSub) {
+			case 'all':
+				setting.openSub = 'ALLOPEN';
+				break;
+			case 'just':
+				setting.openSub = 'JUST';
+				break;
+			default:
+				setting.openSub = 'CLOSE';
+				break;
+		}
+		console.log("    -> " + setting.openSub);
+		console.log("//userCSS");
+		switch (setting.userCSS) {
+			case true:
+				setting.userCSS = true;
+				break;
+			default:
+				setting.userCSS = false;
+				break;
+		}
+		console.log("    -> " + setting.userCSS);
+		/* 各種設定 */
+
 		matchExp = new RegExp("^" + setting.pattern + "(?:.+) \\(([0-9]+)\\)");
 
-		setupCSS(CSSfileURL);
+		if (!setting.userCSS) setupCSS(CSSfileURL);
+
 		var target = document.querySelectorAll('.hatena-module-category .hatena-urllist');
 		for (var i = 0; i < target.length; i++) {
 			createSubCategory(target[i]);
@@ -48,12 +76,13 @@
 				//console.log(found);
 				if (typeof (categoryList[found[1]]) === 'undefined') {
 					$(target[i]).before(''
-						+ '<li class="js-category-parent js-category-' + found[1] + '">'
+						+ '<li class="htnpsne-subcategory js-category-parent js-category-' + found[1] + '">'
 							+ '<div class="archive-module-button js-category-toggle" data-category-name="' + found[1] + '">'
 								+ '<span class="js-category-parent-hide-button" data-category-name="' + found[1] + '">▼</span>'
 								+ '<span class="js-category-parent-show-button" data-category-name="' + found[1] + '">▶</span>'
 							+ '</div>'
-							+ '<span data-parent-category-name="' + found[1] + '">' + found[1] + '</span>'
+							+ '<span class="js-category-parent-title js-category-' + found[1]
+								+ '" data-parent-category-name="' + found[1] + '">' + found[1] + '</span>'
 							+ '<ul class="js-category-child js-category-child-' + found[1] + '"></ul>'
 						+ '</li>');
 					var targetChild = parentUl.querySelector('ul .js-category-child-' + found[1]);
@@ -65,10 +94,12 @@
 
 			}
 		}
+		//親カテゴリの合計数を表示させるやつ
 		for (var key in categoryList) {
 			var target = parentUl.querySelector('span[data-parent-category-name="' + key + '"]');
 			target.innerText = key + ' (' + categoryList[key].count + ')';
-			if (categoryList[key].count == 1) {
+			//サブカテゴリの展開操作(初期表示)
+			if (setting.openSub == 'ALLOPEN' || (setting.openSub == 'JUST' && categoryList[key].count == 1)) {
 				target.parentElement.dataset.categoryDisplay = "block";
 				target.parentElement.classList.add('js-category-child-show');
 			}
