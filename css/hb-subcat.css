@@ -1,0 +1,35 @@
+﻿li.js-category-parent {
+	/*
+	border-bottom:none;
+	padding: 0.2em;
+	*/
+}
+
+.js-category-child li {
+	display: none;
+}
+
+.js-category-toggle > span {
+	cursor: pointer;
+}
+
+.js-category-parent-hide-button {
+	display: none;
+}
+
+.js-category-parent-show-button {
+}
+
+.js-category-child-show .js-category-parent-hide-button {
+	display: inline;
+}
+
+.js-category-child-show .js-category-parent-show-button {
+	display: none;
+}
+
+.js-category-child-show .js-category-child li {
+	display: block;
+	border-bottom: none;
+	padding: 0.5em;
+}
