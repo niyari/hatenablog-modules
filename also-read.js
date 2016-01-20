@@ -1,5 +1,7 @@
 ﻿/**
  * はてなブログに関連エントリを追加する
+ * HatenaBlog Also read (c) 2015,2016 Pocket Systems. http://psn.hatenablog.jp/entry/also-read
+ * Released under the MIT license
  */
 // ==ClosureCompiler==
 // @output_file_name also-read.min.js
@@ -7,7 +9,7 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve HatenaBlog Also read (c) 2015 Pocket Systems. | psn.hatenablog.jp
+ * @preserve HatenaBlog Also read (c) 2016 Pocket Systems. | MIT license | psn.hatenablog.jp/entry/also-read
  * (・ω・) where to go? https://www.youtube.com/watch?v=nbeGeXgjh9Q
  */
 (function () {
@@ -53,11 +55,13 @@
 					"link": $(this).find('link').text()
 				});
 			});
-			//
 			insertEntryList(targetID, list);
-			//console.log(list);
 		}).fail(function (xhr, status, error) {
 			// 通信失敗
+			insertEntryList(targetID, [{
+				"title": '(取得できませんでした。再読み込みを行ってください)',
+				"link": blogsUriBase
+			}]);
 		});
 	}
 
@@ -72,9 +76,12 @@
 			}
 		}).done(function (data, status, xhr) {
 			insertEntryList(targetID, data);
-			//console.log(data);
 		}).fail(function (xhr, status, error) {
 			// 通信失敗
+			insertEntryList(targetID, [{
+				"title": '(取得できませんでした。再読み込みを行ってください)',
+				"link": blogsUriBase
+			}]);
 		});
 	}
 
@@ -86,17 +93,18 @@
 		for (var i = 0; i < target.length; i++) {
 			if (target[i].dataset.userCss == "true") loadCSS = false;
 
-				createModuleBody(target[i], Math.random().toString(36).slice(6));
-
 			var mode = target[i].dataset.mode;
 			//カテゴリーが設定されていない事がある　ランダムでも良いかもしれない
 			if (categoryList.length == 0) mode = "Recent";
 
 			if (mode == "Popular") {
+				createModuleBody(target[i], Math.random().toString(36).slice(6), "Popular");
 				getHatebu(target[i].dataset.targetId, blogsUriBase);
 			} else if (mode == "Recent") {
+				createModuleBody(target[i], Math.random().toString(36).slice(6), "Recent");
 				getRSS(target[i].dataset.targetId, blogsUriBase + '/rss');
 			} else {
+				createModuleBody(target[i], Math.random().toString(36).slice(6), categoryList[0]);
 				getRSS(target[i].dataset.targetId, blogsUriBase + rssPath + categoryList[0]);
 			}
 			$('#Htn-psne-Awasete-Link-' + target[i].dataset.targetId).tipsy({ opacity: 1 }); //はてなブログ依存のツールチップ
@@ -120,12 +128,16 @@
 
 	//Fisher-Yatesアルゴリズムでシャッフルする
 	function listShuffle(a) { var b, c, d; a = a.slice(); b = a.length; if (0 === b) return a; for (; --b;) c = Math.floor(Math.random() * (b + 1)), d = a[b], a[b] = a[c], a[c] = d; return a }
+	//文字列をエスケープするやつ
+	function escapeHtml(a) { return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;") };
 
 	//リスト生成
 	function insertEntryList(targetID, list) {
 		var targetDiv = document.querySelectorAll('.js-htnpsne-awasete-entrys[data-target-id="' + targetID + '"]')[0];
 		var count = targetDiv.dataset.count;
 		var trackParameters = typeof (targetDiv.dataset.trackParameters) === 'undefined' ? "" : targetDiv.dataset.trackParameters;
+		var listType = typeof (targetDiv.dataset.listType) === 'undefined' ? "" : targetDiv.dataset.listType;
+		var displayBookmark_count = typeof (targetDiv.dataset.displayBookmark_count) === 'undefined' ? false : targetDiv.dataset.displayBookmark_count;
 		targetDiv.innerHTML = '';
 		if (list.length == 0) {
 			list = [{
@@ -141,52 +153,91 @@
 		}
 		//TODO:はてなブログのブログパーツ経由で表示させているが、オリジナルのHTMLを出力が必要か(要望があるか)確認する
 		//その際、はてブの一覧ので画像表示にコストが掛かるため、実装の前にどうにかする必要がある
-		for (var i = 0; i < count; i++) {
-			var elem = document.createElement("iframe");
-			elem.className = "embed-card embed-blogcard";
-			elem.style.display = "block";
-			elem.style.width = "100%";
-			elem.frameBorder = 0;
-			elem.scrolling = "no";
-			elem.title = list[i].title;
-			// ブログパーツ経由にする
-			elem.src = 'http://hatenablog-parts.com/embed?url=' + encodeURIComponent(list[i].link + trackParameters);
+		if (listType == 'list') {
+			var elem = document.createElement("ul");
+			var listHtml = '';
+			for (var i = 0; i < count; i++) {
+				listHtml += '<li><a href="' + list[i].link + trackParameters + '">' + escapeHtml(list[i].title);
+				if (displayBookmark_count == 'true') {
+					listHtml += '<img src="http://b.st-hatena.com/entry/image/' + list[i].link + '" class="bookmark-count">'
+				}
+				listHtml += '</a></li>';
+			}
+			elem.innerHTML = listHtml;
 			targetDiv.appendChild(elem);
+		} else {
+			//iframe
+			// iframe版はdisplayBookmark_countはtrue扱いとなる
+			for (var i = 0; i < count; i++) {
+				var elem = document.createElement("iframe");
+				elem.className = "embed-card embed-blogcard";
+				elem.style.display = "block";
+				elem.style.width = "100%";
+				elem.frameBorder = 0;
+				elem.scrolling = "no";
+				elem.title = list[i].title;
+				// ブログパーツ経由にする 外部サイト経由のアクセスとしてはてなブログのアクセス解析に載る
+				// 他にも //psn.hatenablog.jp/embed/also-read というようにembedに置換しても良い (アクセス解析に載らない)
+				elem.src = 'http://hatenablog-parts.com/embed?url=' + encodeURIComponent(list[i].link + trackParameters);
+				targetDiv.appendChild(elem);
+			}
 		}
 	}
 
 
 
-	function createModuleBody(targetDiv, targetID) {
+	function createModuleBody(targetDiv, targetID,targetListName) {
 		var form = document.createElement("div");
 		form.dataset.targetId = targetID;
 		targetDiv.dataset.targetId = targetID;
 		var trackParameters = typeof (targetDiv.dataset.trackParameters) === 'undefined' ?
 			"" : ' data-track-parameters="' + targetDiv.dataset.trackParameters + '"';
+		var listType = typeof (targetDiv.dataset.listType) === 'undefined' ?
+			"" : ' data-list-type="' + targetDiv.dataset.listType + '"';
+		var displayBookmark_count = typeof (targetDiv.dataset.displayBookmark_count) === 'undefined' ?
+			"" : ' data-display-bookmark_count="' + targetDiv.dataset.displayBookmark_count + '"';
 
-		var formButtons = '<button class="js-htnpsne-awasete-btn-reload" data-target-id="' + targetID + '"><i class="blogicon-redirect"></i></button>';
+		var formButtons = '<button class="js-htnpsne-awasete-btn-reload" data-target-id="' + targetID + '"><i class="blogicon-repeat"></i></button>';
 		if (targetDiv.dataset.moreBtn == "true")
 			formButtons += '<button class="js-htnpsne-awasete-btn-readmore" data-target-id="' + targetID + '"><i class="blogicon-list"></i></button>'
 		if (targetDiv.dataset.subscribeBtn == "true")
 			formButtons += '<button class="js-htnpsne-awasete-btn-subscribe" data-target-id="' + targetID + '"><i class="blogicon-subscribe"></i></button>'
 
-		var optionList = '<option value="" data-command="Popular">人気エントリー</option><option value="" data-command="Recent">新着エントリー</option>';
+		var optionList = '';
+		if (targetListName == "Popular") {
+			optionList += '<option value="" data-command="Popular" selected>人気エントリー</option>';
+			targetListName = "";
+		} else {
+			optionList += '<option value="" data-command="Popular">人気エントリー</option>';
+		}
+		if (targetListName == "Recent") {
+			optionList += '<option value="" data-command="Recent" selected>新着エントリー</option>';
+			targetListName = "";
+		} else {
+			optionList += '<option value="" data-command="Recent">新着エントリー</option>';
+		}
 
 		for (var i = 0; i < categoryList.length; i++) {
-			optionList += '<option value="' + categoryList[i] + '">' + decodeURIComponent(categoryList[i]) + '</option>';
+			optionList += '<option value="' + categoryList[i] + '"';
+			if (targetListName == categoryList[i]) {
+				optionList += ' selected';
+			}
+			optionList += '>' + escapeHtml(decodeURIComponent(categoryList[i])) + '</option>';
 		}
 		form.innerHTML = ''
 			+ '<div class="js-htnpsne-awasete-control-outer">'
 			+ '<span class="js-htnpsne-awasete-title">' + targetDiv.dataset.title + '</span>'
 			+ '<span class="js-htnpsne-awasete-control">'
-			+ '<a href="http://psn.hatenablog.jp/" style="tipsy-top" id="Htn-psne-Awasete-Link-' + targetID + '" original-title="すなばいじりにアクセス" target="_blank">:)</a>'
+			+ '<a href="http://psn.hatenablog.jp/entry/also-read" style="tipsy-top" id="Htn-psne-Awasete-Link-' + targetID
+			+ '" original-title="この機能は何？" target="_blank"><i class="blogicon-help"></i></a>'
 			+ '<select class="js-htnpsne-awasete-select" data-target-id="' + targetID + '">'
 			+ optionList
 			+ '</select>'
 			+ formButtons
 			+ '</span></div>'
-			+ '<div class="js-htnpsne-awasete-entrys" data-target-id="' + targetID + '" data-count="' + ~~targetDiv.dataset.count + '"'
-			+ trackParameters + '> :) </div>';
+			+ '<div class="js-htnpsne-awasete-entrys" data-target-id="' + targetID
+			+ '" data-count="' + ~~targetDiv.dataset.count + '"'
+			+ trackParameters + listType + displayBookmark_count + '> :) </div>';
 		targetDiv.appendChild(form);
 	}
 

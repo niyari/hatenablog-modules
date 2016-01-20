@@ -15,7 +15,7 @@
 	}
 
 	.js-htnpsne-awasete-control > a {
-		font-size: 0.7em;
+		font-size: 1.2em;
 		text-decoration: none;
 	}
 
@@ -56,6 +56,28 @@ span.js-htnpsne-awasete-title {
 
 .js-htnpsne-awasete-btn-subscribe:hover i:after {
 	content: '購読する';
+}
+
+.js-htnpsne-awasete-entrys ul {
+	padding: .5em;
+}
+
+.js-htnpsne-awasete-entrys li {
+	padding: .2em;
+	list-style: none;
+	border-bottom: solid 1px;
+}
+
+	.js-htnpsne-awasete-entrys li:first-child {
+		border-top: solid 1px;
+	}
+
+	.js-htnpsne-awasete-entrys li a {
+		text-decoration: none;
+	}
+
+.js-htnpsne-awasete-entrys .bookmark-count {
+	vertical-align: text-bottom;
 }
 /* サイドバー */
 .hatena-module-body .js-htnpsne-awasete-control > a:after {
