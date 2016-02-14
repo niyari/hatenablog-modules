@@ -12,7 +12,17 @@
  * @preserve HatenaBlog Also read (c) 2016 Pocket Systems. | MIT license | psn.hatenablog.jp/entry/also-read
  * (・ω・) where to go? https://www.youtube.com/watch?v=nbeGeXgjh9Q
  */
+
 (function () {
+	'use strict';
+	if (typeof (Htnpsne) == 'undefined') Htnpsne = {};
+	if (typeof (Htnpsne.API) == 'undefined') Htnpsne.API = {};
+	Htnpsne.API.htmlTagData = document.getElementsByTagName("html")[0].dataset;
+		//:TODO IE10未満(VistaのIE9など)を切り捨てた共通APIを用意する。
+})();
+
+(function () {
+	'use strict';
 	var blogsUriBase = document.getElementsByTagName("html")[0].dataset.blogsUriBase;
 	var blogBase = document.getElementsByTagName("html")[0].dataset.blog;
 	var categoryPath = '/archive/category/';
@@ -50,10 +60,13 @@
 		}).done(function (data, status, xhr) {
 			//RSSリスト整形
 			$(data).find("item").each(function () {
-				list.push({
-					"title": $(this).find('title').text(),
-					"link": $(this).find('link').text()
-				});
+				if (/^\/entry/.test(location.pathname) == false || location.origin + location.pathname != $(this).find('link').text()) {
+					// /^\/entry/.test(location.pathname) は、記事ページではない場合の計算コストを考慮する為に書いた(要検証)
+					list.push({
+						"title": $(this).find('title').text(),
+						"link": $(this).find('link').text()
+					});
+				}
 			});
 			insertEntryList(targetID, list);
 		}).fail(function (xhr, status, error) {
@@ -65,8 +78,9 @@
 		});
 	}
 
-	//JSONP受信
+	//JSONP(はてなブックマーク)受信
 	function getHatebu(targetID, url) {
+		var list = [];
 		$.ajax({
 			dataType: 'jsonp',
 			url: 'http://b.hatena.ne.jp/entrylist/json',
@@ -75,7 +89,19 @@
 				"url": url
 			}
 		}).done(function (data, status, xhr) {
-			insertEntryList(targetID, data);
+			for (var i = 0; i < data.length; i++) {
+				if (/\/entry\//.test(data[i].link) == true && //エントリーページのみ(簡易判定)
+					location.origin + location.pathname != data[i].link) {
+					list.push({
+						"title": data[i].title,
+						"count": data[i].count,
+						"link": data[i].link
+					});
+				} else {
+					console.log("対象のページを除外しました。(B!)");
+				}
+			}
+			insertEntryList(targetID, list);
 		}).fail(function (xhr, status, error) {
 			// 通信失敗
 			insertEntryList(targetID, [{
@@ -107,7 +133,7 @@
 				createModuleBody(target[i], Math.random().toString(36).slice(6), categoryList[0]);
 				getRSS(target[i].dataset.targetId, blogsUriBase + rssPath + categoryList[0]);
 			}
-			$('#Htn-psne-Awasete-Link-' + target[i].dataset.targetId).tipsy({ opacity: 1 }); //はてなブログ依存のツールチップ
+			$('#Htn-psne-Awasete-Link-' + target[i].dataset.targetId).tipsy({ opacity: 1, gravity: 's' }); //はてなブログ依存のツールチップ
 
 		}
 		setupEventListener();
@@ -228,7 +254,7 @@
 			+ '<div class="js-htnpsne-awasete-control-outer">'
 			+ '<span class="js-htnpsne-awasete-title">' + targetDiv.dataset.title + '</span>'
 			+ '<span class="js-htnpsne-awasete-control">'
-			+ '<a href="http://psn.hatenablog.jp/entry/also-read" style="tipsy-top" id="Htn-psne-Awasete-Link-' + targetID
+			+ '<a href="http://psn.hatenablog.jp/entry/also-read" id="Htn-psne-Awasete-Link-' + targetID
 			+ '" original-title="この機能は何？" target="_blank"><i class="blogicon-help"></i></a>'
 			+ '<select class="js-htnpsne-awasete-select" data-target-id="' + targetID + '">'
 			+ optionList
