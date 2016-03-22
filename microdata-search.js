@@ -1,12 +1,15 @@
 /*
 
 * はてなブログのGoogleの検索結果から「検索結果内の検索ボックス」を表示させる
-
+* MIT
 ** 使い方
 
 以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
 
 <script src="//niyari.github.io/hatenablog-modules/microdata-search.js" charset="utf-8" defer></script>
+
+2016年3月にmicrodataからJSON-LDへ出力を変更しました。目的、結果は同じです。
+以下の説明文は、microdataにて出力していた際のものです。
 
 検索ボックスにmicrodataを差し込むやつです。
 Amazonや価格.comのGoogleの検索結果のように、「検索結果内の検索ボックス」が表示できるようなデータを生成します。
@@ -28,25 +31,47 @@ http://psn.hatenablog.jp/entry/discover-hatena
 
 */
 
-(function(){
-
-	var _baseURI = document.querySelector("html").getAttribute("data-blogs-uri-base");
+(function () {
+	"use strict";
+	var _blogData = document.getElementsByTagName("html")[0].dataset;
+	var _baseURI = _blogData.blogsUriBase;
 	var _searchBoxBody = document.querySelector("div.hatena-module-search-box div.hatena-module-body");
-	if(_searchBoxBody){
+	add_SearchActionJsonLD();
+	if (_searchBoxBody) {
 		//検索Boxがあるらしいので色々付加する
-		add_SearchAction_Tag(_searchBoxBody);
+		//add_SearchAction_Tag(_searchBoxBody);
 	}else{
 		//タグが無いので何かする
 		if(!window.console) {
 			window.console = { log: function(msg){} };
 		}
 		console.log("microdata付き検索ボックス: 検索ボックスが設置されていないようです。");
-		make_SearchBox();
+		//make_SearchBox();
 	}
 
 	//おわり
 
-	function add_SearchAction_Tag(elem){
+	function add_SearchActionJsonLD() {
+		var jsonld = document.createElement('script');
+		jsonld.type = 'application/ld+json';
+		jsonld.innerHTML = JSON.stringify(
+			{
+			"@context": "http://schema.org",
+			"@type": "WebSite",
+			"name": _blogData.blogName,
+			"url": _baseURI + "/",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": _baseURI + "/search?q={search_term_string}",
+				"query-input": "required name=search_term_string"
+			}
+			}
+		);
+		document.getElementsByTagName("head")[0].appendChild(jsonld);
+	}
+	/*
+	function add_SearchAction_Tag(elem) {
+		// JSON-LDに移行したため使用中止となっています。
 		//タグいれるやーつ
 		var meta_url = document.createElement("meta");
 		var meta_target = meta_url.cloneNode(true);
@@ -78,7 +103,8 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		elem.insertBefore(meta_url, elem.firstChild);
 		elem.insertBefore(meta_sitename, elem.firstChild);
 	}
-	function make_SearchBox(){
+	function make_SearchBox() {
+		// JSON-LDに移行したため使用中止となっています。
 		//検索ボックスが設置されていないらしい
 		var html_str = '<!-- microdata付き検索ボックス -->';
 		html_str += '<div class="hatena-module hatena-module-search-box">';
@@ -97,4 +123,5 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		html_str += "\n<!-- / microdata付き検索フォーム -->";
 		document.querySelector("div#box2-inner").insertAdjacentHTML('beforeend',html_str);
 	}
+	*/
 })();
