@@ -1,75 +1,176 @@
-/*
+/**
+ * はてなブログ パンくずリスト Ver2
+ * (c) 2015-2016 Pocket Systems. | MIT License
+ * 詳しい設置方法や詳細は、すなばいじり をご覧ください。
+ * http://psn.hatenablog.jp/entry/breadcrumb
+ */
+// ==ClosureCompiler==
+// @output_file_name breadcrumb.min.js
+// @compilation_level SIMPLE_OPTIMIZATIONS
+// @output_wrapper (function() {%output%})();
+// ==/ClosureCompiler==
+/**
+ * @preserve Htnpsne.API.ts (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
+ */
+if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
+(function (e) {
+	(function (d) {
+		var e = document.getElementsByTagName("head")[0], f = !1; d.htmlTagData = document.getElementsByTagName("html")[0].dataset; d.setupCSS = function (a) { var b = document.createElement("link"); b.href = a; b.rel = "stylesheet"; b.type = "text/css"; e.appendChild(b) }; d.listShuffle = function (a) { var b, c, d; a = a.slice(); b = a.length; if (0 === b) return a; for (; --b;) c = Math.floor(Math.random() * (b + 1)), d = a[b], a[b] = a[c], a[c] = d; return a }; d.escapeHtml = function (a) {
+			return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g,
+			"&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
+		}; d.makeHtmlGoogAds = function (a, b) {
+			void 0 === b && (b = !1); if ("undefined" != typeof a.client && null != a.client && "" != a.client && "undefined" != typeof a.slot && null != a.slot && "" != a.slot) {
+				if (!f) { var c = document.createElement("script"); c.async = !0; c.src = "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"; var d = document.getElementsByTagName("script")[0]; d.parentNode.insertBefore(c, d); f = !0 } if ("undefined" == typeof a.className || null == a.className) a.className = ""; if ("undefined" ==
+				typeof a.style || null == a.style) a.style = { display: "block" }; if ("undefined" == typeof a.format || null == a.format) a.format = "auto"; return b ? (c = document.createElement("ins"), c.className = "adsbygoogle " + a.className, c.setAttribute("data-ad-client", a.client), c.setAttribute("data-ad-slot", a.slot), c.setAttribute("data-ad-format", a.format), c) : '<ins class="adsbygoogle ' + a.className + '" style="' + a.style + '" data-ad-client="' + a.client + '" data-ad-slot="' + a.slot + '" data-ad-format="' + a.format + '"></ins>'
+			}
+		}; d.hatenaProfileIconURL =
+		function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon&size=" + b : "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon" }
+	})(e.API || (e.API = {}))
+})(Htnpsne || (Htnpsne = {}));
+/**
+ * @preserve HatenaBlog Breadcrumb v2 (c) 2015-2016 Pocket Systems. | MIT | psn.hatenablog.jp
+ * (・ω・) where to go? https://www.youtube.com/watch?v=nbeGeXgjh9Q
+ */
+(function () {
+	"use strict";
+	// TODO:セパレート型のパンくずリストを導入しているブログ向け対応
+	var _blogData, _baseURI, _parentCategoryList, _categoryBody, categoryListType = 'list', matchExp;
+	function breadcrumb() {
+		_blogData = Htnpsne.API.htmlTagData;
+		if (_blogData.page === 'about') {
+			var elm_aboutContent = document.querySelector("div.entry-content");
+			var elm_div = document.createElement("div");
+			elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト を利用中です。</a>';
+			elm_aboutContent.appendChild(elm_div);
+		};
+		//if (_blogData.device != 'pc') return;
 
-* はてなブログの記事のカテゴリをパンくずリストのようなデータに差し替える
+		_baseURI = _blogData.blogsUriBase;
+		if (_blogData.page === 'entry') {
+			//準備
+			loadQue();
+			_categoryBody = document.querySelector("header.entry-header div.categories");
+			//TOPページから見たら複数ある事もある。
+			if (_categoryBody instanceof HTMLElement === false) return;
+			make_BreadcrumbNav(_categoryBody);
+		} else if (_blogData.page === 'archive' && /^\/archive\/category\//.test(location.pathname)) {
+			//カテゴリページ
+			modify_childProp();
+		};
+	}
 
-** 使い方
+	function loadQue() {
+		if (typeof (Htnpsne.Breadcrumb) == 'undefined') Htnpsne.Breadcrumb = {};
+		var que = Htnpsne.Breadcrumb.q;
+		if (que instanceof Array === false) {
+			var que = [];
+			if (window._parentCategory) {
+				//古い設定がある
+				console.log("Breadcrumb：古い設定があります。");
+				display_comeOnBreadcrumbV2();// 移行を促す奴
+				que.push(['parentCategory', window._parentCategory]);
+			} else {
+				que.push(['parentCategory', []]);
+			}
+		}
+		for (var i = 0; i < que.length; i++) {
+			try {
+				switch (que[i][0]) {
+					case 'parentCategory':
+						_parentCategoryList = que[i][1];
+						break;
+					case 'mode':
+						if (que[i][1].Category == 'Separate') {
+							categoryListType = 'Separate';
+							matchExp = new RegExp("" + que[i][1].pattern + "");
+						} else {
+							categoryListType = 'list';
+						}
+						break;
+					default:
+						break;
+				}
+			} catch (e) {
+				console.log("Queue Error →");
+				console.log(e);
+			}
+		}
+	}
 
-以下をコピーして、デザイン編集 → カスタマイズ → フッタHTML に貼り付け
+	function display_comeOnBreadcrumbV2() {
+		// 移行を促す奴
+		Messenger.addEventListener('init', function (data) {
+			// if (data) return; // 移行告知キャンセル中
+			if (data.can_open_editor) {
+				var elm_comeOnWindow = document.createElement("div");
+				elm_comeOnWindow.innerHTML = '<div style="position: fixed;top: 45px;right: 0px;background: #fff;'
+					+ 'max-width: 100%;padding: .2em;border: solid 1px #303030;">'
+					+ '<div style="font-size: 1.3em;text-align: center;border-bottom: solid 2px #000;">パンくずリスト</div>'
+					+ '<div style="padding-bottom: .3em;">最新のバージョンがあります。<br>(古い設定が残っています)</div>'
+					+ '<div style="text-align: right;margin: 0.3em 0.1em;">'
+					+ '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank" style="background: #309aea;text-decoration: none;color: #FFF;'
+					+ 'padding: .3em;">確認する</a>'
+				  + '</div>'
+				+ '</div>';
+				document.getElementsByTagName("body")[0].appendChild(elm_comeOnWindow);
+			}
+		});
 
-<!-- ここから -->
-<script type="text/javascript">
-//親カテゴリの名前を入力します。カテゴリの名前に " が入る場合は \" と置き換えます。
-var _parentCategory = [
-						"親カテゴリ1",
-						"親カテゴリ\"2",
-						"親カテゴリ3",
-					  ];
-</script>
-<script src="//niyari.github.io/hatenablog-modules/breadcrumb.js" charset="utf-8" async defer></script>
-<!-- ここまで -->
+	}
 
-記事のヘッダ部分にあるカテゴリに、パンくずリストのようなmicrodataを差し込むやつです。
-https://support.google.com/webmasters/answer/185417
+	function modify_childProp() {
+		//カテゴリページのパンくずリストのエラーを修正する 2016/03
+		var elm_child = document.querySelector("span.breadcrumb-child[itemtype='http://data-vocabulary.org/Breadcrumb']");
+		if (!elm_child) return;
+		var elm_childSpan = elm_child.querySelector("span[itemprop='title']")
+		var elm_link = document.createElement("a");//
+		elm_link.setAttribute("itemprop", "url");//set itemprop - url
+		elm_link.setAttribute("href", location.href);
+		elm_link.appendChild(elm_childSpan);
+		elm_child.appendChild(elm_link);
 
-どうぞご利用ください。
+		make_JsonLdCategoryPage(location.href, elm_childSpan.innerText);
+	}
 
-免責：何が起きても各自の責任の下お使いください。コメントは程々になりました。
+	function make_JsonLdCategoryPage(uri, pageTitle) {
+		var jsonld = document.createElement('script');
+		jsonld.type = 'application/ld+json';
+		jsonld.innerHTML = JSON.stringify({
+			"@context": "http://schema.org",
+			"@type": "BreadcrumbList",
+			"itemListElement": [{
+				"@type": "ListItem",
+				"position": 1,
+				"item": {
+					"@id": uri,
+					"name": pageTitle
+				}
+			}]
+		});
+		document.getElementsByTagName("head")[0].appendChild(jsonld);
+	}
 
-そもそもブログ側の構造的がアレで、色々無理矢理だったりするので、githubに上げておきます。
-使いやすいように各自、適当に弄ってください。
-
-詳しい設置方法や詳細は、すなばいじり をご覧ください。
-http://psn.hatenablog.jp/entry/discover-hatena
-
-*/
-
-(function(){
-	var _baseURI = document.querySelector("html").getAttribute("data-blogs-uri-base");
-	//TOPページ用表示用。HTMLタグの「data-blogs-uri-base」から拾ってくるのが一番スマートであるよ
-	//準備
-	if(!(window._parentCategory instanceof Array)){_parentCategory = window._parentCategory || [] };
-
-	var _categoryBody = document.querySelectorAll("header.entry-header div.categories");
-	var _breadcrumbHTML = document.createElement("div");
-	//単一ページの場合はカテゴリ表示は一つ。TOPページから見たら複数ある事もある。
-	//検索エンジンが混乱しないように、複数ある場合はスキップさせる。
-	if (_categoryBody.length > 1) return;
-
-	make_BreadcrumbNav(_categoryBody[0]);
-
-//おしまい
-
-	function make_BreadcrumbTree(erem){
+	function make_BreadcrumbTree(elem) {
 		//カテゴリの親子関係を調べて階層レベルとして返す。
 
-		var parentStr = _parentCategory.join('<>') + '<>';
+		var parentStr = _parentCategoryList.join('<>') + '<>';
 		var treeList = [0];
 		var treeLevel = 0;
 
-		if(erem.length === 0){
+		if (elem.length === 0) {
 			//カテゴリの指定がない
 			return treeList;
 		}
-		if(_parentCategory.length === 0){
+		if (_parentCategoryList.length === 0) {
 			//親カテゴリのデータが無い場合は、すべて親カテゴリにする
-			for (var i = 0; i < erem.length; i++){
+			for (var i = 0; i < elem.length; i++) {
 				treeList[i] = 0;
 			}
 			return treeList;
 		}
 
-		for (var i = 0; i < erem.length; i++){
-			if (parentStr.indexOf(erem[i].innerHTML + '<>') > -1 || i === 0){
+		for (var i = 0; i < elem.length; i++) {
+			if (parentStr.indexOf(elem[i].innerHTML + '<>') > -1 || i === 0) {
 				//最初のカテゴリ、または、親カテゴリだった
 				treeLevel = 0;
 			}
@@ -79,63 +180,46 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		return treeList;
 	}
 
-
-	function make_BreadcrumbElem(elem,child_flg){
-		//
-		var el_content = document.createElement("span");//itemscope
-		var el_link = document.createElement("a");//link
-		var el_title = el_content.cloneNode(true);//span - title
-
-		//microdata部分を大まかに設定する
-		el_content.setAttribute("itemscope", "");//set itemscope
-		el_content.setAttribute("itemtype", "http://data-vocabulary.org/Breadcrumb");//set itemtype - url
-		el_link.setAttribute("itemprop", "url");//set itemprop - url
-		el_title.setAttribute("itemprop", "title");//set itemprop - title
-
-		el_title.innerText = elem.innerText;//タイトルを入れる
-		el_link.setAttribute("href", elem.href);//リンク先
-
-		//組み立てる
-		el_link.appendChild(el_title);
-		el_content.appendChild(el_link);
-
-		if (child_flg){
-			//子として指定する
-			el_content.setAttribute("itemprop", "child");
-		}
-		return el_content;
-	}
-
-	function make_BreadcrumbNav(Categories){
-		var nav_Breadcrumb = document.createElement("nav");
+	function make_BreadcrumbNav(Categories) {
 		var categoryList = Categories.querySelectorAll("a");
-
-		if(categoryList.length < 1) return;
-
-		var treeList = make_BreadcrumbTree(categoryList);
-		var nav_Child = [];
-		var nav_Parent = [];
-
-		//逆順に回して子カテゴリから詰め込んでいく
-		for (var i = treeList.length - 1; i >= 0; i--){
-			if(treeList[i] === 0){
-				//親カテゴリ
-				nav_Parent = make_BreadcrumbElem(categoryList[i],0);
-				for(var index in nav_Child){
-					nav_Parent.appendChild(nav_Child[index]);
-				}
-				nav_Breadcrumb.insertBefore(nav_Parent,nav_Breadcrumb.firstChild);
-				nav_Child=[];
-			}else{
-				//子カテゴリ
-				nav_Child.unshift(make_BreadcrumbElem(categoryList[i],1) );
-			}
-
-			//不要になった元のカテゴリ表示を消す
-			Categories.removeChild(categoryList[i]);
-
+		if (categoryList instanceof NodeList === false) {
+			console.log("エントリにカテゴリがありませんでした")
+			return;
 		}
-		//すべての処理が終わったら生成済みのパンくずリストを埋め込む
-		Categories.appendChild(nav_Breadcrumb);
+		var treeList = make_BreadcrumbTree(categoryList);
+		//// JSON-LD
+		var ld_breadcrumbList = [], ld_itemListElement = [];
+		for (var i = treeList.length - 1; i >= 0; i--) {
+			ld_itemListElement.unshift({
+				"@type": "ListItem",
+				"position": treeList[i] + 1,
+				"item": {
+					"@id": categoryList[i].href,
+					"name": categoryList[i].innerText
+				}
+			});
+			if (treeList[i] === 0) {
+				//親カテゴリ
+				ld_breadcrumbList.unshift({
+					"@context": "http://schema.org",
+					"@type": "BreadcrumbList",
+					"itemListElement": ld_itemListElement
+				});
+				ld_itemListElement = [];
+			}
+		}
+		var jsonld = document.createElement('script');
+		jsonld.type = 'application/ld+json';
+		jsonld.innerHTML = JSON.stringify(ld_breadcrumbList);
+		document.getElementsByTagName("head")[0].appendChild(jsonld);
 	}
+
+	if (document.readyState == "uninitialized" || document.readyState == "loading") {
+		window.addEventListener("DOMContentLoaded", function () {
+			breadcrumb();
+		}, false);
+	} else {
+		breadcrumb();
+	}
+
 })();
