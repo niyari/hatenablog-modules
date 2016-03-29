@@ -10,27 +10,21 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve Htnpsne.API.ts (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
- */
-if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
-(function (e) {
-	(function (d) {
-		var e = document.getElementsByTagName("head")[0], f = !1; d.htmlTagData = document.getElementsByTagName("html")[0].dataset; d.setupCSS = function (a) { var b = document.createElement("link"); b.href = a; b.rel = "stylesheet"; b.type = "text/css"; e.appendChild(b) }; d.listShuffle = function (a) { var b, c, d; a = a.slice(); b = a.length; if (0 === b) return a; for (; --b;) c = Math.floor(Math.random() * (b + 1)), d = a[b], a[b] = a[c], a[c] = d; return a }; d.escapeHtml = function (a) {
-			return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g,
-			"&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
-		}; d.makeHtmlGoogAds = function (a, b) {
-			void 0 === b && (b = !1); if ("undefined" != typeof a.client && null != a.client && "" != a.client && "undefined" != typeof a.slot && null != a.slot && "" != a.slot) {
-				if (!f) { var c = document.createElement("script"); c.async = !0; c.src = "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"; var d = document.getElementsByTagName("script")[0]; d.parentNode.insertBefore(c, d); f = !0 } if ("undefined" == typeof a.className || null == a.className) a.className = ""; if ("undefined" ==
-				typeof a.style || null == a.style) a.style = { display: "block" }; if ("undefined" == typeof a.format || null == a.format) a.format = "auto"; return b ? (c = document.createElement("ins"), c.className = "adsbygoogle " + a.className, c.setAttribute("data-ad-client", a.client), c.setAttribute("data-ad-slot", a.slot), c.setAttribute("data-ad-format", a.format), c) : '<ins class="adsbygoogle ' + a.className + '" style="' + a.style + '" data-ad-client="' + a.client + '" data-ad-slot="' + a.slot + '" data-ad-format="' + a.format + '"></ins>'
-			}
-		}; d.hatenaProfileIconURL =
-		function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon&size=" + b : "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon" }
-	})(e.API || (e.API = {}))
-})(Htnpsne || (Htnpsne = {}));
-/**
  * @preserve HatenaBlog Breadcrumb v2 (c) 2015-2016 Pocket Systems. | MIT | psn.hatenablog.jp
  * (・ω・) where to go? https://www.youtube.com/watch?v=nbeGeXgjh9Q
  */
+
+/**
+ * @preserve Htnpsne.API.ts (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
+ */
+if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
+(function(e){(function(d){var e=document.getElementsByTagName("head")[0],f=!1;d.htmlTagData=document.getElementsByTagName("html")[0].dataset;d.setupCSS=function(a){var b=document.createElement("link");b.href=a;b.rel="stylesheet";b.type="text/css";e.appendChild(b)};d.listShuffle=function(a){var b,c,d;a=a.slice();b=a.length;if(0===b)return a;for(;--b;)c=Math.floor(Math.random()*(b+1)),d=a[b],a[b]=a[c],a[c]=d;return a};d.escapeHtml=function(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,
+"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")};d.makeHtmlGoogAds=function(a,b){void 0===b&&(b=!1);if("undefined"!=typeof a.client&&null!=a.client&&""!=a.client&&"undefined"!=typeof a.slot&&null!=a.slot&&""!=a.slot){if(!f){var c=document.createElement("script");c.async=!0;c.src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";var d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(c,d);f=!0}if("undefined"==typeof a.className||null==a.className)a.className="";if("undefined"==
+typeof a.style||null==a.style)a.style={display:"block"};if("undefined"==typeof a.format||null==a.format)a.format="auto";return b?(c=document.createElement("ins"),c.className="adsbygoogle "+a.className,c.setAttribute("data-ad-client",a.client),c.setAttribute("data-ad-slot",a.slot),c.setAttribute("data-ad-format",a.format),c):'<ins class="adsbygoogle '+a.className+'" style="'+a.style+'" data-ad-client="'+a.client+'" data-ad-slot="'+a.slot+'" data-ad-format="'+a.format+'"></ins>'}};d.hatenaProfileIconURL=
+function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon&size=" + b : "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon" }
+})(e.API || (e.API = {}))
+})(Htnpsne || (Htnpsne = {}));
+
 (function () {
 	"use strict";
 	// TODO:セパレート型のパンくずリストを導入しているブログ向け対応
@@ -40,7 +34,7 @@ if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
 		if (_blogData.page === 'about') {
 			var elm_aboutContent = document.querySelector("div.entry-content");
 			var elm_div = document.createElement("div");
-			elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト を利用中です。</a>';
+			elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト</a> を利用中です。';
 			elm_aboutContent.appendChild(elm_div);
 		};
 		//if (_blogData.device != 'pc') return;
@@ -60,7 +54,6 @@ if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
 	}
 
 	function loadQue() {
-		if (typeof (Htnpsne.Breadcrumb) == 'undefined') Htnpsne.Breadcrumb = {};
 		var que = Htnpsne.Breadcrumb.q;
 		if (que instanceof Array === false) {
 			var que = [];
@@ -214,6 +207,9 @@ if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
 		document.getElementsByTagName("head")[0].appendChild(jsonld);
 	}
 
+	if (typeof (Htnpsne.Breadcrumb) == 'undefined') Htnpsne.Breadcrumb = {};
+	if (Htnpsne.Breadcrumb.processed) return;
+	Htnpsne.Breadcrumb.processed = true;
 	if (document.readyState == "uninitialized" || document.readyState == "loading") {
 		window.addEventListener("DOMContentLoaded", function () {
 			breadcrumb();
