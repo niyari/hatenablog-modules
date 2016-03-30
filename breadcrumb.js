@@ -55,12 +55,14 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 
 	function loadQue() {
 		var que = Htnpsne.Breadcrumb.q;
+		if (window._parentCategory) {
+			//古い設定がある
+			console.log("Breadcrumb：古い設定があります。");
+			display_comeOnBreadcrumbV2();// 移行を促す奴
+		}
 		if (que instanceof Array === false) {
 			var que = [];
 			if (window._parentCategory) {
-				//古い設定がある
-				console.log("Breadcrumb：古い設定があります。");
-				display_comeOnBreadcrumbV2();// 移行を促す奴
 				que.push(['parentCategory', window._parentCategory]);
 			} else {
 				que.push(['parentCategory', []]);
