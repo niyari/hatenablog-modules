@@ -37,9 +37,10 @@
 		var list = [];
 		//TODO: カテゴリの取得はbodyタグのclassからも取得できそう
 		//TODO: 不要データも含まれるが、エントリーページかどうかも取得できる(page-entry)
+		//TODO: "body.page-entry div.categories a" のみで良いかもしれない/スマホ版の「記事下のカテゴリ表示」に対応
 		var selector = "body.page-entry div.entry-categories a";
 		if (document.getElementsByTagName("html")[0].dataset.device == "touch") {
-			selector = "body.page-entry header.entry-header div.categories a";
+			selector = "body.page-entry div.categories a";
 		}
 		var categoryList = document.querySelectorAll(selector);
 
