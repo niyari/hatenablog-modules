@@ -15,7 +15,7 @@
 
 (function () {
 	'use strict';
-	if (typeof (Htnpsne) == 'undefined') Htnpsne = {};
+	if (typeof (Htnpsne) == 'undefined') window.Htnpsne = {};
 	if (typeof (Htnpsne.API) == 'undefined') Htnpsne.API = {};
 	Htnpsne.API.htmlTagData = document.getElementsByTagName("html")[0].dataset;
 		//:TODO IE10未満(VistaのIE9など)を切り捨てた共通APIを用意する。
