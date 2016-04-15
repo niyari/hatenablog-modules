@@ -54,7 +54,7 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 	function moduleExecuteTest() {
 		var elm_aboutContent, elm_div;
 		if (document.getElementById('Htnpsne-about-elem') == null) {
-			elm_aboutContent = document.querySelector("div.entry-content");
+			elm_aboutContent = document.querySelector("div.entry-content dl");
 			elm_div = document.createElement("dt");
 
 			elm_div.innerText = 'ブログ拡張機能';
