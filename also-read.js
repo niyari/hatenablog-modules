@@ -9,7 +9,7 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve HatenaBlog Also read (c) 2016 Pocket Systems. | MIT license | psn.hatenablog.jp/entry/also-read
+ * @preserve HatenaBlog Also read (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp/entry/also-read
  * (・ω・) where to go? https://www.youtube.com/watch?v=nbeGeXgjh9Q
  */
 
@@ -23,25 +23,21 @@
 
 (function () {
 	'use strict';
-	var blogsUriBase = document.getElementsByTagName("html")[0].dataset.blogsUriBase;
-	var blogBase = document.getElementsByTagName("html")[0].dataset.blog;
+	var blogsUriBase = Htnpsne.API.htmlTagData.blogsUriBase;
+	var blogBase = Htnpsne.API.htmlTagData.blog;
 	var categoryPath = '/archive/category/';
 	var rssPath = '/rss/category/';
 	var loadCSS = true;
 	var categoryList = [];
 	var feedlyURL = 'http://cloud.feedly.com/#subscription%2Ffeed%2F';
 	var externalCSS = '//niyari.github.io/hatenablog-modules/css/also-read.css';
+	var defaultModuleTitle = 'あわせて読みたい';
 
 	//カテゴリリスト取得
 	function getCategoryList() {
 		var list = [];
-		//TODO: カテゴリの取得はbodyタグのclassからも取得できそう
-		//TODO: 不要データも含まれるが、エントリーページかどうかも取得できる(page-entry)
-		//TODO: "body.page-entry div.categories a" のみで良いかもしれない/スマホ版の「記事下のカテゴリ表示」に対応
-		var selector = "body.page-entry div.entry-categories a";
-		if (document.getElementsByTagName("html")[0].dataset.device == "touch") {
-			selector = "body.page-entry div.categories a";
-		}
+		//TODO: "body.page-entry div.categories a" のみで良い/スマホ版の「記事下のカテゴリ表示」に対応
+		var selector = "body.page-entry div.categories a";
 		var categoryList = document.querySelectorAll(selector);
 
 		for (var i = 0; i < categoryList.length; i++) {
@@ -122,8 +118,11 @@
 
 			var mode = target[i].dataset.mode;
 			//カテゴリーが設定されていない事がある　ランダムでも良いかもしれない
-			if (categoryList.length == 0) mode = "Recent";
-
+			if (categoryList.length == 0) {
+				mode = listShuffle(["Recent", "Popular"])[0];
+			} else {
+				categoryList = listShuffle(categoryList);
+			}
 			if (mode == "Popular") {
 				createModuleBody(target[i], Math.random().toString(36).slice(6), "Popular");
 				getHatebu(target[i].dataset.targetId, blogsUriBase);
@@ -142,8 +141,30 @@
 			//デフォルトCSS読み込み
 			setupCSS(externalCSS);
 		}
-	}
+		if (Htnpsne.API.htmlTagData.page === 'about') {
+			//描画用コードの動作確認
+			moduleExecuteTest();
+		};
 
+	}
+	//描画用コードの動作確認
+	function moduleExecuteTest() {
+		var elm_aboutContent, elm_div;
+		if (document.getElementById('Htnpsne-about-elem') == null) {
+			elm_aboutContent = document.querySelector("div.entry-content");
+			elm_div = document.createElement("dt");
+
+			elm_div.innerText = 'ブログ拡張機能';
+			elm_aboutContent.appendChild(elm_div);
+			elm_div = document.createElement("dd");
+			elm_div.id = 'Htnpsne-about-elem';
+			elm_aboutContent.appendChild(elm_div);
+		}
+		elm_aboutContent = document.getElementById('Htnpsne-about-elem');
+		elm_div = document.createElement("div");
+		elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/also-read" target="_blank">Also read(はてなブログ あわせて読みたい) を利用中です。</a>';
+		elm_aboutContent.appendChild(elm_div);
+	}
 	//CSSをリンクする
 	function setupCSS(url) {
 		var elmSideMenuCSS = document.createElement("link");
@@ -160,7 +181,7 @@
 
 	//リスト生成
 	function insertEntryList(targetID, list) {
-		var targetDiv = document.querySelectorAll('.js-htnpsne-awasete-entrys[data-target-id="' + targetID + '"]')[0];
+		var targetDiv = document.querySelector('.js-htnpsne-awasete-entrys[data-target-id="' + targetID + '"]');
 		var count = targetDiv.dataset.count;
 		var trackParameters = typeof (targetDiv.dataset.trackParameters) === 'undefined' ? "" : targetDiv.dataset.trackParameters;
 		var listType = typeof (targetDiv.dataset.listType) === 'undefined' ? "" : targetDiv.dataset.listType;
@@ -223,12 +244,14 @@
 			"" : ' data-list-type="' + targetDiv.dataset.listType + '"';
 		var displayBookmark_count = typeof (targetDiv.dataset.displayBookmark_count) === 'undefined' ?
 			"" : ' data-display-bookmark_count="' + targetDiv.dataset.displayBookmark_count + '"';
+		var displayModuleTitle = typeof (targetDiv.dataset.title) === 'undefined' || targetDiv.dataset.title == '' ?
+			defaultModuleTitle : targetDiv.dataset.title;
 
-		var formButtons = '<button class="js-htnpsne-awasete-btn-reload" data-target-id="' + targetID + '"><i class="blogicon-repeat"></i></button>';
+		var formButtons = '<button class="js-htnpsne-awasete-btn-reload" data-target-id="' + targetID + '"><i class="blogicon-repeat"></i><span></span></button>';
 		if (targetDiv.dataset.moreBtn == "true")
-			formButtons += '<button class="js-htnpsne-awasete-btn-readmore" data-target-id="' + targetID + '"><i class="blogicon-list"></i></button>'
+			formButtons += '<button class="js-htnpsne-awasete-btn-readmore" data-target-id="' + targetID + '"><i class="blogicon-list"></i><span></span></button>'
 		if (targetDiv.dataset.subscribeBtn == "true")
-			formButtons += '<button class="js-htnpsne-awasete-btn-subscribe" data-target-id="' + targetID + '"><i class="blogicon-subscribe"></i></button>'
+			formButtons += '<button class="js-htnpsne-awasete-btn-subscribe" data-target-id="' + targetID + '"><i class="blogicon-subscribe"></i><span></span></button>'
 
 		var optionList = '';
 		if (targetListName == "Popular") {
@@ -251,9 +274,9 @@
 			}
 			optionList += '>' + escapeHtml(decodeURIComponent(categoryList[i])) + '</option>';
 		}
-		form.innerHTML = ''
-			+ '<div class="js-htnpsne-awasete-control-outer">'
-			+ '<span class="js-htnpsne-awasete-title">' + targetDiv.dataset.title + '</span>'
+		form.innerHTML = '<aside>'
+			+ '<h1 class="js-htnpsne-awasete-control-outer">'
+			+ '<span class="js-htnpsne-awasete-title">' + displayModuleTitle + '</span>'
 			+ '<span class="js-htnpsne-awasete-control">'
 			+ '<a href="http://psn.hatenablog.jp/entry/also-read" id="Htn-psne-Awasete-Link-' + targetID
 			+ '" original-title="この機能は何？" target="_blank"><i class="blogicon-help"></i></a>'
@@ -261,10 +284,11 @@
 			+ optionList
 			+ '</select>'
 			+ formButtons
-			+ '</span></div>'
+			+ '</span></h1>'
 			+ '<div class="js-htnpsne-awasete-entrys" data-target-id="' + targetID
-			+ '" data-count="' + ~~targetDiv.dataset.count + '"'
-			+ trackParameters + listType + displayBookmark_count + '> :) </div>';
+			+ '" data-count="' + Math.abs(targetDiv.dataset.count * 1) + '"'
+			+ trackParameters + listType + displayBookmark_count + '> :) </div>'
+			+ '</aside>';
 		targetDiv.appendChild(form);
 	}
 
@@ -280,7 +304,7 @@
 						getRSS(targetID, blogsUriBase + rssPath + this.value);
 					} else {
 						//新着 もしくは人気
-						var targetSelect = document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0];
+						var targetSelect = document.querySelector('select[data-target-id="' + targetID + '"]');
 						if (targetSelect[targetSelect.selectedIndex].dataset.command == "Popular") {
 							//人気記事
 							getHatebu(targetID, blogsUriBase);
@@ -303,10 +327,10 @@
 
 					//ボタンのtargetIDからセレクトボックスを指定する
 					var targetID = this.dataset.targetId;
-					var targetSelect = document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0];
+					var targetSelect = document.querySelector('select[data-target-id="' + targetID + '"]');
 					var openURL = '';
 					if (targetSelect.value != "") {
-						getRSS(targetID, blogsUriBase + rssPath + document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0].value);
+						getRSS(targetID, blogsUriBase + rssPath + targetSelect.value);
 					} else {
 						//新着 もしくは人気
 						if (targetSelect[targetSelect.selectedIndex].dataset.command == "Popular") {
@@ -335,11 +359,11 @@
 					var targetID = this.dataset.targetId;
 					//console.log(document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0].value);
 
-					var targetSelect = document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0];
+					var targetSelect = document.querySelector('select[data-target-id="' + targetID + '"]');
 					var openURL = '';
 					if (targetSelect.value != "") {
 						openURL = blogsUriBase + categoryPath
-							+ document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0].value;
+							+ targetSelect.value;
 					} else {
 						//新着 もしくは人気
 						if (targetSelect[targetSelect.selectedIndex].dataset.command == "Popular") {
@@ -366,11 +390,11 @@
 
 					//ボタンのtargetIDからセレクトボックスを指定する
 					var targetID = this.dataset.targetId;
-					var targetSelect = document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0];
+					var targetSelect = document.querySelector('select[data-target-id="' + targetID + '"]');
 					var openURL = '';
 					if (targetSelect.value != "") {
 						openURL = blogsUriBase + rssPath
-							+ document.querySelectorAll('select[data-target-id="' + targetID + '"]')[0].value;
+							+ targetSelect.value;
 					} else {
 						//新着 もしくは人気
 						if (targetSelect[targetSelect.selectedIndex].dataset.command == "Popular") {

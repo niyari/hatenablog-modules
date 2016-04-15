@@ -2,6 +2,11 @@
 	padding: 0.2em 0;
 }
 
+h1.js-htnpsne-awasete-control-outer {
+	font-size: 1em;
+	font-weight: initial;
+}
+
 .js-htnpsne-awasete-control {
 	float: right;
 }
@@ -20,7 +25,8 @@
 	}
 
 span.js-htnpsne-awasete-title {
-	font-size: 1.2em;
+	font-size: 1.143em;
+	font-weight: bold;
 	padding-left: 0.3em;
 	border-left: solid 3px #888;
 }
@@ -46,15 +52,15 @@ span.js-htnpsne-awasete-title {
 		padding-left: 0.3em;
 	}
 
-.js-htnpsne-awasete-btn-reload:hover i:after {
+.js-htnpsne-awasete-btn-reload span:after {
 	content: '再読み込み';
 }
 
-.js-htnpsne-awasete-btn-readmore:hover i:after {
+.js-htnpsne-awasete-btn-readmore span:after {
 	content: 'もっと見る';
 }
 
-.js-htnpsne-awasete-btn-subscribe:hover i:after {
+.js-htnpsne-awasete-btn-subscribe span:after {
 	content: '購読する';
 }
 
@@ -80,33 +86,73 @@ span.js-htnpsne-awasete-title {
 	vertical-align: text-bottom;
 }
 /* サイドバー */
-.hatena-module-body .js-htnpsne-awasete-control > a:after {
-	content: "\A";
-	white-space: pre;
-}
-
 .hatena-module-body .js-htnpsne-awasete-control {
+	position: relative;
 	float: none;
 	clear: both;
 	display: block;
+	text-align: center;
 }
 
 	.hatena-module-body .js-htnpsne-awasete-control select {
-		width: 133px;
+		width: 90%; /* fallback */
+		width: calc(100% - 1.1em);
 	}
 
 	.hatena-module-body .js-htnpsne-awasete-control button {
-		width: 133px;
+		width: 33.1%; /* fallback */
+		width: calc(100% / 3 - 2px);
 	}
 
-.hatena-module-body .js-htnpsne-awasete-btn-reload i:after {
-	content: '再読み込み';
+.hatena-module-body .js-htnpsne-awasete-btn-reload span {
+	display: none;
 }
 
-.hatena-module-body .js-htnpsne-awasete-btn-readmore i:after {
-	content: 'もっと見る';
+.hatena-module-body .js-htnpsne-awasete-btn-readmore span {
+	display: none;
 }
 
-.hatena-module-body .js-htnpsne-awasete-btn-subscribe i:after {
-	content: '購読する';
+.hatena-module-body .js-htnpsne-awasete-btn-subscribe span {
+	display: none;
+}
+/* Media Queries - Tablet */
+@media (min-width: 801px) and (max-width: 1040px) {
+}
+/* Media Queries - Small Tablet & Smartphone */
+@media (max-width: 800px) {
+	.js-htnpsne-awasete-control {
+		position: relative;
+		float: none;
+		clear: both;
+		display: block;
+		text-align: center;
+	}
+
+		.js-htnpsne-awasete-control select {
+			width: 90%; /* fallback */
+			width: calc(100% - 1.1em);
+		}
+
+		.js-htnpsne-awasete-control button {
+			width: 33.1%; /* fallback */
+			width: calc(100% / 3 - 2px);
+		}
+}
+/* Media Queries - Smartphone */
+@media (max-width: 480px) {
+	.js-htnpsne-awasete-control{
+		font-size: 1.5em;
+	}
+
+	.js-htnpsne-awasete-btn-reload span {
+		display: none;
+	}
+
+	.js-htnpsne-awasete-btn-readmore span {
+		display: none;
+	}
+
+	.js-htnpsne-awasete-btn-subscribe span {
+		display: none;
+	}
 }
