@@ -32,10 +32,7 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 	function breadcrumb() {
 		_blogData = Htnpsne.API.htmlTagData;
 		if (_blogData.page === 'about') {
-			var elm_aboutContent = document.querySelector("div.entry-content");
-			var elm_div = document.createElement("div");
-			elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト</a> を利用中です。';
-			elm_aboutContent.appendChild(elm_div);
+			moduleExecuteTest();
 		};
 		//if (_blogData.device != 'pc') return;
 
@@ -51,6 +48,25 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 			//カテゴリページ
 			modify_childProp();
 		};
+	}
+
+	//コードの動作確認
+	function moduleExecuteTest() {
+		var elm_aboutContent, elm_div;
+		if (document.getElementById('Htnpsne-about-elem') == null) {
+			elm_aboutContent = document.querySelector("div.entry-content");
+			elm_div = document.createElement("dt");
+
+			elm_div.innerText = 'ブログ拡張機能';
+			elm_aboutContent.appendChild(elm_div);
+			elm_div = document.createElement("dd");
+			elm_div.id = 'Htnpsne-about-elem';
+			elm_aboutContent.appendChild(elm_div);
+		}
+		elm_aboutContent = document.getElementById('Htnpsne-about-elem');
+		elm_div = document.createElement("div");
+		elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト を利用中です。</a>';
+		elm_aboutContent.appendChild(elm_div);
 	}
 
 	function loadQue() {
