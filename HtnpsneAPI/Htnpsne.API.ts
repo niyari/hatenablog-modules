@@ -1,6 +1,7 @@
 ﻿/// <reference path="./Htnpsne.d.ts" />
 /**
- * Htnpsne.API.ts for HatenaBlog CommonAPI  MIT License
+ * Htnpsne.API.ts for HatenaBlog CommonAPI
+ * Released under the MIT license
  */
 // ==ClosureCompiler==
 // @output_file_name Htnpsne.API.min.js
@@ -102,6 +103,9 @@ module Htnpsne.API {
 
     //カテゴリー有無のチェック
     export function hasCategory(categoryName: string = '') {
+        //はてなブログでは カテゴリ名に空白(全半角)がある場合はハイフンに変わります。
+        // "foo bar"→"foo-bar" "foo　bar"→"foo-bar"
+        categoryName = categoryName.replace(/\s/g, "-");
         if (document.getElementsByTagName('html')[0].getAttribute('data-page') != "entry" || categoryName === '') return false;
         return (document.getElementsByTagName('body')[0].className).split(" ").indexOf('category-' + categoryName) >= 0;
     }
