@@ -151,14 +151,13 @@
 	function moduleExecuteTest() {
 		var elm_aboutContent, elm_div;
 		if (document.getElementById('Htnpsne-about-elem') == null) {
-			elm_aboutContent = document.querySelector("div.entry-content dl");
-			elm_div = document.createElement("dt");
-
-			elm_div.innerText = 'ブログ拡張機能';
-			elm_aboutContent.appendChild(elm_div);
+			elm_aboutContent = document.querySelectorAll('div.entry-content dd')[8];
 			elm_div = document.createElement("dd");
 			elm_div.id = 'Htnpsne-about-elem';
-			elm_aboutContent.appendChild(elm_div);
+			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
+			elm_div = document.createElement("dt");
+			elm_div.innerText = 'ブログ拡張機能';
+			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
 		}
 		elm_aboutContent = document.getElementById('Htnpsne-about-elem');
 		elm_div = document.createElement("div");

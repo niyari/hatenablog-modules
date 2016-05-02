@@ -15,27 +15,25 @@
  */
 
 /**
- * @preserve Htnpsne.API.ts (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
+ * @preserve Htnpsne.API.ts v1.0.2 (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
  */
 if (typeof (Htnpsne) == 'undefined') var Htnpsne = {};
 (function(e){(function(d){var e=document.getElementsByTagName("head")[0],f=!1;d.htmlTagData=document.getElementsByTagName("html")[0].dataset;d.setupCSS=function(a){var b=document.createElement("link");b.href=a;b.rel="stylesheet";b.type="text/css";e.appendChild(b)};d.listShuffle=function(a){var b,c,d;a=a.slice();b=a.length;if(0===b)return a;for(;--b;)c=Math.floor(Math.random()*(b+1)),d=a[b],a[b]=a[c],a[c]=d;return a};d.escapeHtml=function(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,
-"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")};d.makeHtmlGoogAds=function(a,b){void 0===b&&(b=!1);if("undefined"!=typeof a.client&&null!=a.client&&""!=a.client&&"undefined"!=typeof a.slot&&null!=a.slot&&""!=a.slot){if(!f){var c=document.createElement("script");c.async=!0;c.src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";var d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(c,d);f=!0}if("undefined"==typeof a.className||null==a.className)a.className="";if("undefined"==
-typeof a.style||null==a.style)a.style={display:"block"};if("undefined"==typeof a.format||null==a.format)a.format="auto";return b?(c=document.createElement("ins"),c.className="adsbygoogle "+a.className,c.setAttribute("data-ad-client",a.client),c.setAttribute("data-ad-slot",a.slot),c.setAttribute("data-ad-format",a.format),c):'<ins class="adsbygoogle '+a.className+'" style="'+a.style+'" data-ad-client="'+a.client+'" data-ad-slot="'+a.slot+'" data-ad-format="'+a.format+'"></ins>'}};d.hatenaProfileIconURL=
-function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon&size=" + b : "http://n.hatena.ne.jp/" + a + "/profile/image?type=icon" }
-})(e.API || (e.API = {}))
-})(Htnpsne || (Htnpsne = {}));
+"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")};d.makeHtmlGoogAds=function(a,b){void 0===b&&(b=!1);if("undefined"==typeof a.client||null==a.client||""==a.client){if(b){var c=document.createElement("ins");return c.setAttribute("data-ad-error","error")}}else if("undefined"==typeof a.slot||null==a.slot||""==a.slot){if(b)return c=document.createElement("ins"),c.setAttribute("data-ad-error","error")}else{if(!f){c=document.createElement("script");c.async=!0;c.src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+var d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(c,d);f=!0}if("undefined"==typeof a.className||null==a.className)a.className="";if("undefined"==typeof a.style||null==a.style)a.style={display:"block"};if("undefined"==typeof a.format||null==a.format)a.format="auto";return b?(c=document.createElement("ins"),c.className="adsbygoogle "+a.className,c.setAttribute("data-ad-client",a.client),c.setAttribute("data-ad-slot",a.slot),c.setAttribute("data-ad-format",a.format),c):'<ins class="adsbygoogle '+
+a.className+'" style="'+a.style+'" data-ad-client="'+a.client+'" data-ad-slot="'+a.slot+'" data-ad-format="'+a.format+'"></ins>'}};d.hatenaProfileIconURL=function(a,b){void 0===a&&(a="my");return b?"http://n.hatena.ne.jp/"+a+"/profile/image?type=icon&size="+b:"http://n.hatena.ne.jp/"+a+"/profile/image?type=icon"};d.hasCategory=function(a){void 0===a&&(a="");a=a.replace(/\s/g,"-");return"entry"!=document.getElementsByTagName("html")[0].getAttribute("data-page")||""===a?!1:0<=document.getElementsByTagName("body")[0].className.split(" ").indexOf("category-"+
+a)}})(e.API||(e.API={}))})(Htnpsne||(Htnpsne={}));
 
 (function () {
 	"use strict";
 	// TODO:セパレート型のパンくずリストを導入しているブログ向け対応
 	var _blogData, _baseURI, _parentCategoryList, _categoryBody, categoryListType = 'list', matchExp;
+	var _setting = {allParent:false};
 	function breadcrumb() {
 		_blogData = Htnpsne.API.htmlTagData;
 		if (_blogData.page === 'about') {
 			moduleExecuteTest();
 		};
-		//if (_blogData.device != 'pc') return;
-
 		_baseURI = _blogData.blogsUriBase;
 		if (_blogData.page === 'entry') {
 			//準備
@@ -54,18 +52,17 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 	function moduleExecuteTest() {
 		var elm_aboutContent, elm_div;
 		if (document.getElementById('Htnpsne-about-elem') == null) {
-			elm_aboutContent = document.querySelector("div.entry-content dl");
-			elm_div = document.createElement("dt");
-
-			elm_div.innerText = 'ブログ拡張機能';
-			elm_aboutContent.appendChild(elm_div);
+			elm_aboutContent = document.querySelectorAll('div.entry-content dd')[8];
 			elm_div = document.createElement("dd");
 			elm_div.id = 'Htnpsne-about-elem';
-			elm_aboutContent.appendChild(elm_div);
+			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
+			elm_div = document.createElement("dt");
+			elm_div.innerText = 'ブログ拡張機能';
+			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
 		}
 		elm_aboutContent = document.getElementById('Htnpsne-about-elem');
 		elm_div = document.createElement("div");
-		elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト を利用中です。</a>';
+		elm_div.innerHTML = '<a href="http://psn.hatenablog.jp/entry/breadcrumb" target="_blank">パンくずリスト(はてなブログ) を利用中です。</a>';
 		elm_aboutContent.appendChild(elm_div);
 	}
 
@@ -97,6 +94,9 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 						} else {
 							categoryListType = 'list';
 						}
+						break;
+					case 'setting':
+						_setting = que[i][1];
 						break;
 					default:
 						break;
@@ -172,7 +172,7 @@ function (a, b) { void 0 === a && (a = "my"); return b ? "http://n.hatena.ne.jp/
 			//カテゴリの指定がない
 			return treeList;
 		}
-		if (_parentCategoryList.length === 0) {
+		if (_parentCategoryList.length === 0 || _setting.allParent == true) {
 			//親カテゴリのデータが無い場合は、すべて親カテゴリにする
 			for (var i = 0; i < elem.length; i++) {
 				treeList[i] = 0;
