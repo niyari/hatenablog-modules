@@ -9,7 +9,7 @@
 	font-style: normal;
 }
 
-.htnshare {
+.htnshare, [class^="htnshare-"], [class*=" htnshare-"] {
 	/* use !important to prevent issues with browser extensions that change fonts */
 	font-family: 'htnshare' !important;
 	speak: none;
@@ -30,69 +30,91 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-.htnshare a.keyword {
-	border: none;
-}
+
+	.htnshare a.keyword {
+		border: none;
+	}
+
 .htnshare-amp_logo:before {
-    content: "\e901";
+	content: "\e901";
 }
+
 .htnshare-close:before {
-    content: "\e900";
+	content: "\e900";
 }
+
 .htnshare-cross:before {
-    content: "\e900";
+	content: "\e900";
 }
+
 .htnshare-menu:before {
-    content: "\e902";
+	content: "\e902";
 }
+
 .htnshare-monolith:before {
-    content: "\e903";
+	content: "\e903";
 }
+
 .htnshare-ph_protection:before {
-    content: "\e904";
+	content: "\e904";
 }
+
 .htnshare-pocket_logo:before {
-    content: "\e905";
+	content: "\e905";
 }
+
 .htnshare-reditt_logo:before {
-    content: "\e906";
+	content: "\e906";
 }
+
 .htnshare-rss:before {
-    content: "\e907";
+	content: "\e907";
 }
+
 .htnshare-sq_facebook:before {
-    content: "\e908";
+	content: "\e908";
 }
+
 .htnshare-sq_feedly:before {
-    content: "\e909";
+	content: "\e909";
 }
+
 .htnshare-sq_google_plus:before {
-    content: "\e90a";
+	content: "\e90a";
 }
+
 .htnshare-sq_gplus:before {
-    content: "\e90a";
+	content: "\e90a";
 }
+
 .htnshare-sq_hatebu:before {
-    content: "\e90b";
+	content: "\e90b";
 }
+
 .htnshare-sq_line_logo:before {
-    content: "\e90c";
+	content: "\e90c";
 }
+
 .htnshare-sq_pocket:before {
-    content: "\e90d";
+	content: "\e90d";
 }
+
 .htnshare-sq_reddit:before {
-    content: "\e90e";
+	content: "\e90e";
 }
+
 .htnshare-sq_rss:before {
-    content: "\e90f";
+	content: "\e90f";
 }
+
 .htnshare-sq_subscribe:before {
-    content: "\e910";
+	content: "\e910";
 }
+
 .htnshare-sq_twitter:before {
-    content: "\e911";
+	content: "\e911";
 }
+
 .htnshare-subscribe:before {
-    content: "\e912";
+	content: "\e912";
 }
