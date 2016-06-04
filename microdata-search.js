@@ -48,7 +48,16 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		console.log("microdata付き検索ボックス: 検索ボックスが設置されていないようです。");
 		//make_SearchBox();
 	}
-
+	if (_blogData.page === "search" && _blogData.device === "touch") {
+		//スマホ版でタイトルの重複が発生する事象の対応
+		//「○○の検索結果 - ブログ名」というタイトルではなく、ブログ名のみ表示されているため検出される
+		var matchExp = new RegExp("の検索結果 \- " + _blogData.blogName + "$");
+		if (matchExp.test(document.title) === false) {
+			//改修された場合はスキップ
+			document.title = (document.querySelector(".search-form input")).value
+				+ " の検索結果 - " + _blogData.blogName;
+		}
+	}
 	//おわり
 
 	function add_SearchActionJsonLD() {
