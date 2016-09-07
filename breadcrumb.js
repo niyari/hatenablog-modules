@@ -52,13 +52,35 @@ a)}})(e.API||(e.API={}))})(Htnpsne||(Htnpsne={}));
 	function moduleExecuteTest() {
 		var elm_aboutContent, elm_div;
 		if (document.getElementById('Htnpsne-about-elem') == null) {
-			elm_aboutContent = document.querySelectorAll('div.entry-content dd')[8];
-			elm_div = document.createElement("dd");
-			elm_div.id = 'Htnpsne-about-elem';
-			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
-			elm_div = document.createElement("dt");
-			elm_div.innerText = 'ブログ拡張機能';
-			elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent.nextSibling);
+			if (document.querySelector('.about-subscription-count') != null) {
+				//最後から2番目に追加
+				elm_aboutContent = document.querySelectorAll('div.entry-content dt');
+				elm_aboutContent = elm_aboutContent[elm_aboutContent.length - 1];
+				elm_div = document.createElement("dt");
+				elm_div.innerText = 'ブログ拡張機能';
+				elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent);
+				elm_div = document.createElement("dd");
+				elm_div.id = 'Htnpsne-about-elem';
+				elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent);
+			} else {
+				//最後に追加
+				elm_aboutContent = document.querySelectorAll('div.entry-content dd');
+				if (elm_aboutContent.length == 0) {
+					//aboutページのコンテンツが空なのでdivを入れる
+					elm_div = document.createElement("div");
+					elm_aboutContent = document.querySelector('div.entry-content');
+					elm_aboutContent.appendChild(elm_div);
+					elm_aboutContent = elm_div;
+				} else {
+					elm_aboutContent = elm_aboutContent[elm_aboutContent.length - 1];
+				}
+				elm_div = document.createElement("dt");
+				elm_div.innerText = 'ブログ拡張機能';
+				elm_aboutContent.parentNode.appendChild(elm_div);
+				elm_div = document.createElement("dd");
+				elm_div.id = 'Htnpsne-about-elem';
+				elm_aboutContent.parentNode.appendChild(elm_div);
+			}
 		}
 		elm_aboutContent = document.getElementById('Htnpsne-about-elem');
 		elm_div = document.createElement("div");
