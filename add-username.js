@@ -20,8 +20,20 @@ Htnpsne.AddAuthor.init(["ユーザID1","ユーザID1","ユーザID1"],1);
 詳細は、すなばいじり をご覧ください。
 http://psn.hatenablog.jp/entry/discover-hatena
 */
+
+/*
+
+//TODO:
+2016/09の仕様は、はてなハイクのAPIを使った名前の取得
+https://h.hatena.ne.jp/api/friendships/show.json?callback=jQuery19106939333802523071_1473241377396&url_name=sample&url_name=hatenablog
+/aboutページがカスタマイズ可能になったので、プロフィールが表示されているかを確認
+カスタマイズの自由度が上がったので、そもそも不要なのでは、と思うやつ。→ deprecated へ移動予定
+*/
+
 (function(){
 	if (typeof(Htnpsne) == 'undefined') Htnpsne = {};
+	Htnpsne.AddAuthor = {};
+	/*
 	Htnpsne.AddAuthor = {
 			users:[],
 			vertical:false,
@@ -69,5 +81,5 @@ http://psn.hatenablog.jp/entry/discover-hatena
 		var dataPage = document.querySelector("html").getAttribute("data-page");
 		if (dataPage === "about") Htnpsne.AddAuthor.disp();
 	}, false);
-
+	*/
 })();
