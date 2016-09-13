@@ -21,7 +21,7 @@ https://h.hatena.ne.jp/api/friendships/show.json?callback=jQuery1910693933380252
 
 (function () {
 	"use strict";
-	if (typeof(Htnpsne) == 'undefined') Htnpsne = {};
+	if (typeof(Htnpsne) == 'undefined') window.Htnpsne = {};
 	Htnpsne.AddAuthor = {
 		init: function (name, vertical_flg) {
 			window.addEventListener("DOMContentLoaded", function () {
