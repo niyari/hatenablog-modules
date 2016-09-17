@@ -36,12 +36,13 @@
 	//カテゴリリスト取得
 	function getCategoryList() {
 		var list = [];
+		var targetDomain = blogsUriBase.split('://')[1];
 		//TODO: "body.page-entry div.categories a" のみで良い/スマホ版の「記事下のカテゴリ表示」に対応
 		var selector = "body.page-entry div.categories a";
 		var categoryList = document.querySelectorAll(selector);
 
 		for (var i = 0; i < categoryList.length; i++) {
-			var listStr = categoryList[i].href.split(blogBase + categoryPath)[1];
+			var listStr = categoryList[i].href.split(targetDomain + categoryPath)[1];
 			if (typeof (listStr) !== 'undefined') list.push(listStr);
 		}
 		return list;
