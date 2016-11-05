@@ -17,12 +17,12 @@
 	var blogHtml = document.getElementsByTagName('html')[0], matchExp;
 	if (blogHtml.getAttribute('data-device') == "touch") return;
 	if (blogHtml.getAttribute('data-page') == "index") {
-		matchExp = new RegExp(blogHtml.getAttribute('data-blog') + "\/$");
+		matchExp = new RegExp(blogHtml.getAttribute('data-blogs-uri-base') + "\/$");
 		if (matchExp.test(location.href)) {
 			location.href = blogHtml.getAttribute('data-blogs-uri-base') + '/archive';
 		}
 	} else if (blogHtml.getAttribute('data-page') == "archive") {
-		matchExp = new RegExp(blogHtml.getAttribute('data-blog') + "\/archive$");
+		matchExp = new RegExp(blogHtml.getAttribute('data-blogs-uri-base') + "\/archive$");
 		if (matchExp.test(location.href)) {
 			document.title = blogHtml.getAttribute('data-blog-name');
 		}
