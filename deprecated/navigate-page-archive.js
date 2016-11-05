@@ -9,7 +9,7 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve navigate-page-archive.js v1.0.0 (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
+ * @preserve navigate-page-archive.js v1.0.1 (c) 2016 Pocket Systems. | MIT | psn.hatenablog.jp
  * ! WORNING ! This shouldn't be used for a visitor. :(
  * (「・ω・)「 Moment of the frame, in slow motion https://www.youtube.com/watch?v=HM63o4UlUPU
  */
