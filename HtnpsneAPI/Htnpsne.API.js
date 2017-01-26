@@ -8,7 +8,7 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve Htnpsne.API.ts v1.0.3 (c) 2017 Pocket Systems. | MIT | psn.hatenablog.jp
+ * @preserve Htnpsne.API.ts v1.0.4 (c) 2017 Pocket Systems. | MIT | psn.hatenablog.jp
  * (「・ω・)「 Moment of the frame, in slow motion https://www.youtube.com/watch?v=HM63o4UlUPU
  */
 var Htnpsne;
@@ -16,26 +16,17 @@ var Htnpsne;
     var API;
     (function (API) {
         "use strict";
-        API.version = "1.0.3";
+        API.version = "1.0.4";
         var HeadTag = document.getElementsByTagName("head")[0];
         var delayedFlg = { HatenaTime: false, GoogleAds: false };
-        API.htmlTagData = (function () {
-            var dataset = document.getElementsByTagName("html")[0].dataset;
-            // フォールバック IE 10 以下
-            if (typeof dataset === "undefined") {
-                var attr = document.getElementsByTagName("html")[0].attributes;
-                dataset = {};
-                for (var i = 0; i < attr.length; i++) {
-                    if (attr[i].name.indexOf("data-") === 0) {
-                        var keyName = attr[i].name.slice(5).replace(/-([a-z])/g, function (all, letter) {
-                            return letter.toUpperCase();
-                        });
-                        dataset[keyName] = attr[i].value;
-                    }
-                }
-            }
-            return dataset;
-        })();
+        /**
+         * HTMLに置かれているデータ属性へのショートカット
+         */
+        API.htmlTagData = document.getElementsByTagName("html")[0].dataset;
+        if (typeof API.htmlTagData === "undefined") {
+            console.log("if you'd like to use many of our latest and greatest features,"
+                + " please upgrade to a modern, fully supported browser. :)");
+        }
         /**
          * CSS の読み込み (linkタグの作成)
          * @param url
@@ -84,13 +75,8 @@ var Htnpsne;
         }
         API.escapeHtml = escapeHtml;
         ;
-        /**
-         * (WIP) Google AdSense 用HTMLタグを生成する
-         * @param AdsData
-         * @param objectFlg
-         */
         function makeHtmlGoogAds(AdsData, objectFlg) {
-            if (objectFlg === void 0) { objectFlg = false; }
+            if (objectFlg === void 0) { objectFlg = true; }
             // 必須項目のチェック data-ad-client
             if (typeof (AdsData.client) === "undefined" || AdsData.client === null || AdsData.client === "") {
                 if (objectFlg) {
@@ -118,29 +104,22 @@ var Htnpsne;
             if (typeof (AdsData.className) === "undefined" || AdsData.className === null) {
                 AdsData.className = "";
             }
-            if (typeof (AdsData.style) === "undefined" || AdsData.style === null) {
-                AdsData.style = { display: "block" };
+            if (typeof (AdsData.style) === "undefined" || AdsData.style === null || AdsData.style === {}) {
+                AdsData.style.display = "block";
             }
             if (typeof (AdsData.format) === "undefined" || AdsData.format === null) {
                 AdsData.format = "auto";
             }
-            if (objectFlg) {
-                var elmInsTag = document.createElement("ins");
-                elmInsTag.className = "adsbygoogle " + AdsData.className;
-                elmInsTag.setAttribute("data-ad-client", AdsData.client);
-                elmInsTag.setAttribute("data-ad-slot", AdsData.slot);
-                elmInsTag.setAttribute("data-ad-format", AdsData.format);
-                // elmInsTag.style = AdsData.style;
-                return elmInsTag;
+            var elmInsTag = document.createElement("ins");
+            elmInsTag.className = "adsbygoogle " + AdsData.className;
+            elmInsTag.setAttribute("data-ad-client", AdsData.client);
+            elmInsTag.setAttribute("data-ad-slot", AdsData.slot);
+            elmInsTag.setAttribute("data-ad-format", AdsData.format);
+            Object.keys(AdsData.style).map(function (key) { return elmInsTag.style[key] = AdsData.style[key]; });
+            if (objectFlg === false) {
+                return elmInsTag.outerHTML;
             }
-            else {
-                return ""
-                    + "<ins class=\"adsbygoogle " + AdsData.className + "\""
-                    + " style=\"" + AdsData.style + "\""
-                    + " data-ad-client=\"" + AdsData.client + "\""
-                    + " data-ad-slot=\"" + AdsData.slot + "\""
-                    + " data-ad-format=\"" + AdsData.format + "\"></ins>";
-            }
+            return elmInsTag;
         }
         API.makeHtmlGoogAds = makeHtmlGoogAds;
         /**

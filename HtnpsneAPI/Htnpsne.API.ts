@@ -8,35 +8,111 @@
 // @output_wrapper (function() {%output%})();
 // ==/ClosureCompiler==
 /**
- * @preserve Htnpsne.API.ts v1.0.3 (c) 2017 Pocket Systems. | MIT | psn.hatenablog.jp
+ * @preserve Htnpsne.API.ts v1.0.4 (c) 2017 Pocket Systems. | MIT | psn.hatenablog.jp
  * (「・ω・)「 Moment of the frame, in slow motion https://www.youtube.com/watch?v=HM63o4UlUPU
  */
-
 namespace Htnpsne.API {
     "use strict";
-    export const version: string = "1.0.3";
+    /**
+     * はてなブログのHTMLタグに入るデータ属性 20170124更新
+     */
+    interface HatenaBlogTtmlTagDataset {
+        /**
+         * 管理者がアクセスするドメイン。"//blog.hatena.ne.jp"固定と考えて良い
+         */
+        adminDomain: string;
+        /**
+         * ブログオーナー。はてなIDが入る
+         */
+        author: string;
+        /**
+         * 利用言語。"ja en"
+         */
+        availLangs: string;
+        /**
+         * 初期ドメイン。例 "psn.hatenablog.jp" はてなブログMediaでは "example.hatenablog-oem.com" になる
+         */
+        blog: string;
+        /**
+         * (TODO)コメント順
+         */
+        blogCommentsTopIsNew: string;
+        /**
+         * ブログhost。初期ドメインと同じ値
+         */
+        blogHost: string;
+        /**
+         * ブログの公開状況(全体公開か)。noindexを付与していても、ログアウト状態で閲覧可能であれば "1" 限定公開の場合は ""
+         */
+        blogIsPublic: string;
+        /**
+         * ブログ名
+         */
+        blogName: string;
+        /**
+         * [独自ドメイン対応]ブログURL。 スキームと末尾の / が付く。 例 "http://blog.example.com/"
+         */
+        blogUri: string;
+        /**
+         * [独自ドメイン対応]ブログURL。 スキームが付くが末尾の / は付かない。 例 "http://blog.example.com"
+         */
+        blogsUriBase: string;
+        /**
+         * 基本的に "hatenablog" 。はてなブログMedia利用時にカスタマイズされると固有の値になる
+         */
+        brand: string;
+        /**
+         * 表示中のデバイスモード。 "pc" または "touch"
+         */
+        device: string;
+        /**
+         * グローバルヘッダの色
+         */
+        globalheaderColor: string;
+        /**
+         * グローバルヘッダのUI表示。 "pc" または "touch"
+         */
+        globalheaderType: string;
+        /**
+         * (TODO)(恐らくレスポンシブ表示の案内フラグ)
+         */
+        hasTouchView: string;
+        /**
+         * 
+         */
+        initialState: string;
+        /**
+         * ページフォーマット。"index" "entry"など
+         */
+        page: string;
+        /**
+         * (TODO)Pro(というよりはてなダイアリーPlusのフラグのような気がする) "1" または ""
+         */
+        plusAvailable: string;
+        /**
+         * はてなブログPro フラグ "true" または "false"
+         */
+        pro: string;
+        /**
+         * はてなブログのCDNサーバー ドメイン "https://cdn.blog.st-hatena.com" (おそらく固定)
+         */
+        staticDomain: string;
+        /**
+         * はてなブログ デプロイID 42桁のハッシュ
+         */
+        version: string;
+    }
+    export const version: string = "1.0.4";
     let HeadTag: HTMLElement = document.getElementsByTagName("head")[0];
     let delayedFlg: any = { HatenaTime: false, GoogleAds: false };
-    export let htmlTagData: DOMStringMap | Object = (() => {
-        let dataset: DOMStringMap | Object = document.getElementsByTagName("html")[0].dataset;
-
-        // フォールバック IE 10 以下
-        if (typeof dataset === "undefined") {
-            let attr: NamedNodeMap = document.getElementsByTagName("html")[0].attributes;
-            dataset = {};
-            for (let i: number = 0; i < attr.length; i++) {
-                if (attr[i].name.indexOf("data-") === 0) {
-                    let keyName: string = attr[i].name.slice(5).replace(/-([a-z])/g,
-                        function (all: string, letter: string): string {
-                            return letter.toUpperCase();
-                        });
-                    dataset[keyName] = attr[i].value;
-                }
-            }
-        }
-
-        return dataset;
-    })();
+    /**
+     * HTMLに置かれているデータ属性へのショートカット
+     */
+    export let htmlTagData: HatenaBlogTtmlTagDataset = <any>document.getElementsByTagName("html")[0].dataset;
+    if (typeof htmlTagData === "undefined") {
+        console.log("if you'd like to use many of our latest and greatest features,"
+            + " please upgrade to a modern, fully supported browser. :)");
+    }
 
     /**
      * CSS の読み込み (linkタグの作成)
@@ -88,10 +164,18 @@ namespace Htnpsne.API {
 
     /**
      * (WIP) Google AdSense 用HTMLタグを生成する
-     * @param AdsData
-     * @param objectFlg
+     * @param AdsData Google Adsのパラメータ
+     * @param objectFlg 返却をHTMLで欲しい場合はfalseとする
      */
-    export function makeHtmlGoogAds(AdsData: any, objectFlg: boolean = false): any {
+    interface GoogAdsData {
+        client: string;
+        slot: string;
+        className?: string;
+        style?: CSSStyleDeclaration; // TODO:HTMLStyle
+        format: string;
+
+    }
+    export function makeHtmlGoogAds(AdsData: GoogAdsData, objectFlg: boolean = true): any {
         // 必須項目のチェック data-ad-client
         if (typeof (AdsData.client) === "undefined" || AdsData.client === null || AdsData.client === "") {
             if (objectFlg) {
@@ -118,28 +202,22 @@ namespace Htnpsne.API {
         if (typeof (AdsData.className) === "undefined" || AdsData.className === null) {
             AdsData.className = "";
         }
-        if (typeof (AdsData.style) === "undefined" || AdsData.style === null) {
-            AdsData.style = { display: "block" };
+        if (typeof (AdsData.style) === "undefined" || AdsData.style === null || AdsData.style === {}) {
+            AdsData.style.display = "block";
         }
         if (typeof (AdsData.format) === "undefined" || AdsData.format === null) {
             AdsData.format = "auto";
         }
-        if (objectFlg) {
-            var elmInsTag: HTMLElement = document.createElement("ins");
-            elmInsTag.className = "adsbygoogle " + AdsData.className;
-            elmInsTag.setAttribute("data-ad-client", AdsData.client);
-            elmInsTag.setAttribute("data-ad-slot", AdsData.slot);
-            elmInsTag.setAttribute("data-ad-format", AdsData.format);
-            // elmInsTag.style = AdsData.style;
-            return elmInsTag;
-        } else {
-            return ""
-                + "<ins class=\"adsbygoogle " + AdsData.className + "\""
-                + " style=\"" + AdsData.style + "\""
-                + " data-ad-client=\"" + AdsData.client + "\""
-                + " data-ad-slot=\"" + AdsData.slot + "\""
-                + " data-ad-format=\"" + AdsData.format + "\"></ins>";
+        var elmInsTag: HTMLElement = document.createElement("ins");
+        elmInsTag.className = "adsbygoogle " + AdsData.className;
+        elmInsTag.setAttribute("data-ad-client", AdsData.client);
+        elmInsTag.setAttribute("data-ad-slot", AdsData.slot);
+        elmInsTag.setAttribute("data-ad-format", AdsData.format);
+        Object.keys(AdsData.style).map(key => elmInsTag.style[key] = AdsData.style[key]);
+        if (objectFlg === false) {
+            return elmInsTag.outerHTML;
         }
+        return elmInsTag;
     }
 
     /**
